@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Services\ActivityService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // Untuk sementara, register ActivityService pada AppServiceProvider
+        $this->app->singleton('Services\Activity', function() {
+            return new ActivityService();
+        });
     }
 }
