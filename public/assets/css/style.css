@@ -1,6 +1,21 @@
 /* ============================================
+    Framework Override
+   ============================================ */
+.row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+}
+.row > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ============================================
     Page Title
-    =========================================== */
+   ============================================ */
 .page-title small {
     margin-left: 0px;
 }
