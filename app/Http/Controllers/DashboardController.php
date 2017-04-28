@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request)
+    public function getIndex(Request $request)
     {
         // Ambil data statistik realisasi dari service statistic
         $service = resolve('Services\Statistic');

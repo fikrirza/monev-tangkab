@@ -11,4 +11,10 @@
 |
 */
 
-Route::get('/', 'DashboardController@index');
+// --- DashboardController
+Route::get('/', 'DashboardController@getIndex');
+
+// --- ActivityController
+Route::get('/program'     , 'ActivityController@getProgramIndex');
+Route::get('/program/{id}', 'ActivityController@getProgramDetail');
+Route::get('/program/buat', 'ActivityController@getProgramCreate');

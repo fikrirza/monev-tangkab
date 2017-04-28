@@ -29,8 +29,14 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="{{ Request::is('/anggaran') ? 'active' : '' }}">
-                        <a href="{{ url('/') }}">
+                    <li class="{{ Request::is('program') ? 'active' : '' }}">
+                        <a href="{{ url('program') }}">
+                            <i class="icon-calendar"></i> 
+                            <span>Program / Kegiatan</span>
+                        </a>
+                    </li>
+                    <li class="{{ Request::is('anggaran') ? 'active' : '' }}">
+                        <a href="{{ url('anggaran') }}">
                             <i class="icon-cash"></i> 
                             <span>Anggaran</span>
                         </a>
