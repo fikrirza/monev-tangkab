@@ -1,5 +1,7 @@
 @extends("layouts.base")
 
+{{-- Lihat DashboardController untuk melihat data mock --}}
+
 @section('content')
     @component('components.header')
         @slot('title')
@@ -11,37 +13,257 @@
         @endslot
 
         @slot('breadcrumb')
-            <li>
-                Test
-            </li>
-            <li>
-                Test 2
-            </li>
         @endslot
     @endcomponent
 
+    <!-- CONTENT -->
     <div class="content">
-        <div class="panel panel-flat">
-            <div class="panel-heading">
-                <h5 class="panel-title">Simple panel</h5>
-                <div class="heading-elements">
-                    <ul class="icons-list">
-                        <li><a data-action="collapse"></a></li>
-                        <li><a data-action="close"></a></li>
-                    </ul>
+
+        <!-- STATISTICS -->
+        <div class="row">
+
+            <div class="col-sm-6 col-md-3">
+                @component('components.widgets.statistic')
+                    @slot('icon')
+                        fa fa-clone fa-3x
+                    @endslot
+                    @slot('value')
+                        528
+                    @endslot
+                    
+
+                    total program
+                @endcomponent
+            </div>
+
+            <div class="col-sm-6 col-md-3">
+                @component('components.widgets.statistic')
+                    @slot('color')
+                        violet
+                    @endslot
+                    @slot('icon')
+                        fa fa-calendar fa-3x
+                    @endslot
+                    @slot('value')
+                        1842
+                    @endslot
+                    
+
+                    kegiatan
+                @endcomponent
+            </div>
+
+            <div class="col-sm-6 col-md-3">
+                @component('components.widgets.statistic')
+                    @slot('color')
+                        indigo
+                    @endslot
+                    @slot('icon')
+                        fa fa-tasks fa-3x
+                    @endslot
+                    @slot('value')
+                        1936
+                    @endslot
+                    
+
+                    sub kegiatan
+                @endcomponent
+            </div>
+
+            <div class="col-sm-6 col-md-3">
+                @component('components.widgets.statistic')
+                    @slot('color')
+                        orange
+                    @endslot
+                    @slot('icon')
+                        fa fa-cubes fa-3x
+                    @endslot
+                    @slot('value')
+                        14.372
+                    @endslot
+                    
+
+                    item kegiatan
+                @endcomponent
+            </div>
+
+
+        </div>
+        <!-- END STATISTICS -->
+
+        <div class="row">
+            <!-- REALIZATION GRAPH -->
+            <div class="col-md-7 col-sm-12">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-semibold">Realisasi Fisik dan Keuangan</h6>
+                        <div class="heading-elements">
+                            <ul class="icons-list">
+                                <li><a data-action="collapse"></a></li>
+                                <li><a data-action="reload"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="chart-container">
+                            <div class="chart" id="graph"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <!-- END REALIZATION GRAPH -->
 
-            <div class="panel-body">
-                <h6 class="text-semibold">Start your development with no hassle!</h6>
-                <p class="content-group">Common problem of templates is that all code is deeply integrated into the core. This limits your freedom in decreasing amount of code, i.e. it becomes pretty difficult to remove unnecessary code from the project. Limitless allows you to remove unnecessary and extra code easily just by removing the path to specific LESS file with component styling. All plugins and their options are also in separate files. Use only components you actually need!</p>
+            <!-- REALIZATION TABLE -->
+            <div class="col-md-5 col-sm-12">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h6 class="panel-title text-semibold">Tabel Realisasi</h6>
+                        <div class="heading-elements">
+                            <ul class="icons-list">
+                                <li><a data-action="collapse"></a></li>
+                                <li><a data-action="reload"></a></li>
+                            </ul>
+                        </div>
+                    </div>
 
-                <h6 class="text-semibold">What is this?</h6>
-                <p class="content-group">Starter kit is a set of pages, useful for developers to start development process from scratch. Each layout includes base components only: layout, page kits, color system which is still optional, bootstrap files and bootstrap overrides. No extra CSS/JS files and markup. CSS files are compiled without any plugins or components. Starter kit was moved to a separate folder for better accessibility.</p>
+                    <div class="panel-body" style="margin-bottom:18px;">
+                        <table class="table table-bordered">
+                            <thead >
+                                <tr>
+                                    <th class="text-center" rowspan="2">Triwulan</th>
+                                    <th class="text-center" colspan="2">Keuangan</th>
+                                    <th class="text-center" colspan="2">Fisik</th>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">Target</th>
+                                    <th class="text-center">Realisasi</th>
+                                    <th class="text-center">Target</th>
+                                    <th class="text-center">Realisasi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-center">
+                                @for ($i = 0; $i < 4; $i++)
+                                    <tr>
+                                        <td>{{ $i + 1 }}</td>
+                                        <td>
+                                            {{ $target['financial'][$i] }}%
+                                        </td>
+                                        <td>
+                                            <span class="text-{{ $realization['financial'][$i] >= $target['financial'][$i] ? 'success' : 'danger' }}">
+                                                {{ $realization['financial'][$i] }}%
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {{ $target['physical'][$i] }}%
+                                        </td>
+                                        <td>
+                                            <span class="text-{{ $realization['physical'][$i] >= $target['physical'][$i] ? 'success' : 'danger' }}">
+                                                {{ $realization['physical'][$i] }}%
+                                            </span>
+                                        </td>
+                                    </tr>
+                                @endfor
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-                <h6 class="text-semibold">How does it work?</h6>
-                <p>You open one of the starter pages, add necessary plugins, uncomment paths to files in components.less file, compile new CSS. That's it. I'd also recommend to open one of main pages with functionality you need and copy all paths/JS code from there to your new page, it's just faster and easier.</p>
+                <!-- BUDGET STATISTIC -->
+                @component('components.widgets.statistic')
+                    
+                    @slot('color')
+                        slate
+                    @endslot
+                    @slot('icon')
+                        fa fa-archive fa-3x
+                    @endslot
+                    @slot('value')
+                        Rp.1.176.302.017.342,00
+                    @endslot
+                    
+
+                    Anggaran Daerah
+                @endcomponent
+                <!-- END BUDGET STATISTIC -->
+
+            </div>
+            <!-- END REALIZATION TABLE -->
+
+        </div>
+
+        <div class="panel">
+            <div class="panel-heading">
+                <h6 class="panel-title text-semibold">KPA Kinerja Terendah</h6>
+            </div>
+            <div class="table-responsive">
+                <table class="table datatable" data-sort="2" data-actions="copy,csv,excel,pdf,print">
+                    <thead>
+                        <tr>
+                            <th>KPA</th>
+                            <th>Anggaran</th>
+                            <th>Deviasi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <a href="#">
+                                    <div class="media-left">
+                                        <span class="text-default text-semibold">Ir. Agung Suryatno</span>
+                                        <div class="text-muted text-size-small">
+                                            Kepala Dinas Energi dan Sumber Daya Mineral
+                                        </div>
+                                    </div>
+                                </a>
+                            </td>
+                            <td>
+                                Rp.10.211.061.000
+                            </td>
+                            <td>
+                                -45.83
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
+        
     </div>
+    <!-- END CONTENT -->
+@endsection
+
+@section('scripts')
+    @parent
+
+    <!-- Graph Data -->
+    <script type="text/javascript">
+        // Sementara untuk mockup, data yang digunakan adalah data mocking / dummy.
+        // HACK: Dibagi 100 karena masalah formatting untuk tanda persentase (%)
+        var graphData = [
+            ['Target Keuangan',    
+                @foreach($target['financial'] as $value)
+                    {{ $value / 100 }},
+                @endforeach
+            ],
+            ['Target Fisik',    
+                @foreach($target['physical'] as $value)
+                    {{ $value / 100 }},
+                @endforeach
+            ],
+
+            ['Realisasi Keuangan',    
+                @foreach($realization['financial'] as $value)
+                    {{ $value / 100 }},
+                @endforeach
+            ],
+            ['Realisasi Fisik',    
+                @foreach($realization['physical'] as $value)
+                    {{ $value / 100 }},
+                @endforeach
+            ],
+        ];
+    </script>
+
+    <script type="text/javascript" src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endsection
