@@ -24,7 +24,7 @@ class StatisticServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('Services\Statistic', function() {
+        $this->app->singleton('Services\Statistic', function() {
             return new StatisticService();
         });
     }
