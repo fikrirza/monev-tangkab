@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>eMonev</title>
 
-    @section('stylesheet')
+    @section('stylesheets')
         @include('layouts.stylesheets')
     @show
 </head>
@@ -39,7 +39,7 @@
 
         </div>
         <!-- /page container -->
-        @section('script')
+        @section('scripts')
             @include('layouts.scripts')
         @show
     </body>
