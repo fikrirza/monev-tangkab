@@ -19,3 +19,6 @@ Route::resource('program', 'ProgramController');
 
 // --- ActivityController
 Route::resource('kegiatan', 'ActivityController');
+
+// --- BudgetController
+Route::get('/anggaran', 'BudgetController@index');
