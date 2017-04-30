@@ -20,8 +20,10 @@ class ActivityService
                 'description' => 'Terpenuhinya Pelayanan Administrasi Perkantoran',
                 'activities'  => [
                     0 => [
-                        'name'  => 'Penyediaan jasa surat menyurat',
-                        'input' => [
+                        'id'     => '1.06.1.06.01.001',
+                        'name'   => 'Penyediaan jasa surat menyurat',
+                        'budget' => 42000000,
+                        'input'  => [
                             'type'        => 'Jumlah Dana',
                             'target'      => 42000000,
                             'unit'        => 'Rp.',
@@ -31,7 +33,6 @@ class ActivityService
                         'output' => [
                             'type'        => 'Terlaksananya pengelolaan arsip SKPD BAPPEDA Kab. Tangerang',
                             'target'      => 12,
-                            
                             'unit'        => 'Bulan',
                             'unitType'    => 'suffix',
                             'realization' => [ 3, 6, 9, 12 ]
@@ -65,10 +66,12 @@ class ActivityService
                         ]
                     ],
                     1 => [
-                        'name'  => 'Penyediaan jasa surat menyurat',
+                        'id'     => '1.06.1.06.01.002',
+                        'name'   => 'Penyediaan jasa komunikasi, sumber daya air dan listrik',
+                        'budget' => 257400000,
                         'input' => [
                             'type'        => 'Jumlah Dana',
-                            'target'      => 42000000,
+                            'target'      => 257400000,
                             'unit'        => 'Rp.',
                             'unitType'    => 'prefix',
                             'realization' => []
@@ -89,21 +92,21 @@ class ActivityService
                         ],
                         'executor' => [
                             0 => [
-                                'id'          => '5.2.2.32.015',
-                                'name'        => 'Tenaga Pengolahan / Pemilahan / Penataan Arsip',
-                                'budget'      => 36000000,
+                                'id'          => '5.2.2.03.001',
+                                'name'        => 'Belanja Telepon',
+                                'budget'      => 14400000,
                                 'realization' => [
-                                    'financial' => 36000000,
+                                    'financial' => 4749686,
                                     'physical'  => 100
                                 ]
                             ],
                             1 => [
-                                'id'          => '5.2.2.33.019',
-                                'name'        => 'Operator/Pengolah Data/Kearsipan',
-                                'budget'      => 6000000,
+                                'id'          => '5.2.2.03.002',
+                                'name'        => 'Belanja Air',
+                                'budget'      => 3000000,
                                 'realization' => [
-                                    'financial' => 6000000,
-                                    'physical'  => 100
+                                    'financial' => 0,
+                                    'physical'  => 0
                                 ]
                             ]
                         ]
