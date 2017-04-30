@@ -6,7 +6,7 @@ class ActivityService
 {
     /**
      * TODO: Seharusnya data program dan kegiatan bisa langsung di consume oleh view dan table secara langsung dengan menggunakan eloquent.
-     *       Namun untuk kepentingan mockup, data dummy sepertinya lebih baik di letakan di service  dan tidak pada controller.
+     *       Namun untuk kepentingan mockup, data dummy sepertinya lebih baik di letakan di service dan tidak pada controller.
      *       Mengingat panjangnya data dummy yg begitu padat.
      */
     public function getProgramData()
@@ -25,21 +25,22 @@ class ActivityService
                             'type'        => 'Jumlah Dana',
                             'target'      => 42000000,
                             'unit'        => 'Rp.',
-                            'place'       => 'prefix',
+                            'unitType'    => 'prefix',
                             'realization' => []
                         ],
                         'output' => [
                             'type'        => 'Terlaksananya pengelolaan arsip SKPD BAPPEDA Kab. Tangerang',
                             'target'      => 12,
+                            
                             'unit'        => 'Bulan',
-                            'place'       => 'suffix',
+                            'unitType'    => 'suffix',
                             'realization' => [ 3, 6, 9, 12 ]
                         ],
                         'result' => [
                             'type'        => 'Terpenuhinya pengelolaan arsip SKPD BAPPEDA Kab. Tangerang',
                             'target'      => 100,
                             'unit'        => '%',
-                            'place'       => 'suffix',
+                            'unitType'    => 'suffix',
                             'realization' => [ 25, 50, 75, 100 ]
                         ],
                         'executor' => [
@@ -69,21 +70,21 @@ class ActivityService
                             'type'        => 'Jumlah Dana',
                             'target'      => 42000000,
                             'unit'        => 'Rp.',
-                            'place'       => 'prefix',
+                            'unitType'    => 'prefix',
                             'realization' => []
                         ],
                         'output' => [
                             'type'        => 'Tersedianya jasa Komunikasi, SDA, Listrik dan Internet',
                             'target'      => 12,
                             'unit'        => 'Bulan',
-                            'place'       => 'suffix',
+                            'unitType'    => 'suffix',
                             'realization' => [ 3, 6, 9, 12 ]
                         ],
                         'result' => [
                             'type'        => 'Terpenuhinya jasa komunikasi, sumber daya air dan listrik',
                             'target'      => 100,
                             'unit'        => '%',
-                            'place'       => 'suffix',
+                            'unitType'    => 'suffix',
                             'realization' => [ 25, 50, 75, 100 ]
                         ],
                         'executor' => [
