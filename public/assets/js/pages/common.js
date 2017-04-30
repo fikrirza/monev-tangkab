@@ -24,15 +24,32 @@ $(function() {
 
     // Basic datatable
     $('table.datatable').each(function(index) {
-        var sort    = $(this).data("sort");
-        var type    = $(this).data("sortType");
-        var actions = $(this).data("actions");
+        var sort      = $(this).data("sort");
+        var type      = $(this).data("sort-type");
+        var paging    = $(this).data("paging");
+        var ordering  = $(this).data("ordering");
+        var info      = $(this).data("show-info");
+        var searching = $(this).data("searching");
+        var actions   = $(this).data("actions");
+
         if (!sort) {
             sort = 0;
         }
 
         if (type !== 'asc' && type !== 'desc') {
-            type = 'desc';
+            type = 'none';
+        }
+
+        if (typeof paging === 'undefined') {
+            paging = true;
+        }
+
+        if (typeof info === 'undefined') {
+            info = true;
+        }
+
+        if (typeof ordering === 'undefined') {
+            ordering = true;
         }
 
         if (!actions) {
@@ -47,6 +64,9 @@ $(function() {
         }
 
         $(this).DataTable({
+            ordering: ordering,
+            paging: paging,
+            info: info,
             aaSorting: [[sort, type]],
             buttons: {            
                 dom: {
