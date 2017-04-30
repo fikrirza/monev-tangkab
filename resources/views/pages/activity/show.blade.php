@@ -100,7 +100,7 @@
                                 </td>
                             @endfor
                             <td>
-                                <a href="{{ url('kegiatan/' . $activity['id'] . '/edit') }}" class="btn btn-raised btn-primary">
+                                <a href="{{ url('kegiatan/' . $activity['id'] . '/ubah?type=output') }}" class="btn btn-raised btn-primary">
                                     Ubah
                                 </a>
                             </td>
@@ -133,7 +133,7 @@
                                 </td>
                             @endfor
                             <td>
-                                <a href="{{ url('kegiatan/' . $activity['id'] . '/edit') }}" class="btn btn-raised btn-primary">
+                                <a href="{{ url('kegiatan/' . $activity['id'] . '/ubah?type=result') }}" class="btn btn-raised btn-primary">
                                     Ubah
                                 </a>
                             </td>
@@ -142,7 +142,42 @@
                 </table>
             </div>
         </div>
-        <!-- END ACTIVITIES TABLE -->
+        <!-- END ACTIVITY DETAIL TABLE -->
+
+        <!-- ACTIVITY EXECUTOR TABLE -->
+        <div class="panel panel-white">
+            <div class="panel-heading">
+                <h6 class="panel-title text-semibold">Pelaksana Kegiatan</h6>
+            </div>
+            <div class="panel-body table-responsive">
+                <table class="table table-bordered datatable">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Kode Rekening</th>
+                            <th rowspan="2">Uraian</th>
+                            <th rowspan="2">Anggaran</th>
+                            <th colspan="2" class="text-center">Realisasi</th>
+                        </tr>
+                        <tr>
+                            <td>Anggaran</td>
+                            <td>Fisik</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($activity['executor'] as $executor)
+                            <tr>
+                                <td>{{ $executor['id'] }}</td>
+                                <td>{{ $executor['name'] }}</td>
+                                <td>Rp.{{ number_format($executor['budget'],2,",",".") }}</td>
+                                <td>Rp.{{ number_format($executor['realization']['financial'],2,",",".") }}</td>
+                                <td>{{ number_format($executor['realization']['physical'],0,",",".") }}%</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END ACTIVITY EXECUTOR TABLE -->
 
     </div>
     <!-- END CONTENT -->
