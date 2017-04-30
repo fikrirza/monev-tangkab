@@ -17,7 +17,7 @@
                 </a>
             </li>
             <li class="active">
-                Detil program
+                {{ $program['name'] }}
             </li>
         @endslot
     @endcomponent
