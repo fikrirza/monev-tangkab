@@ -23,12 +23,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        parent::boot();
-
         Route::resourceVerbs([
             'create' => 'buat',
             'edit'   => 'ubah',
         ]);
+
+        parent::boot();
     }
 
     /**
