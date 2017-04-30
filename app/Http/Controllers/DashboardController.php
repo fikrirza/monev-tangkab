@@ -12,7 +12,7 @@ class DashboardController extends Controller
         $service = resolve('Services\Statistic');
         $data    = $service->getRealizationData();
 
-        return View('dashboard', [
+        return View('pages.dashboard.index', [
             'target'      => $data['target'],
             'realization' => $data['realization']
         ]);

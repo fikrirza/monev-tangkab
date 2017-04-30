@@ -17,7 +17,7 @@ class ProgramController extends Controller
         $service = resolve('Services\Activity');
         $data    = $service->getProgramData();
         
-        return View('program', [
+        return View('pages.program.index', [
             'programs' => $data
         ]);
     }
