@@ -16,3 +16,6 @@ Route::get('/', 'DashboardController@index');
 
 // --- ProgramController
 Route::resource('program', 'ProgramController');
+
+// --- ActivityController
+Route::resource('kegiatan', 'ActivityController');
