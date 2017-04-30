@@ -22,8 +22,8 @@
     <!-- CONTENT -->
     <div class="content">
 
-        <!-- ACTIVITIES TABLE -->
-        <div class="panel">
+        <!-- PROGRAM TABLE -->
+        <div class="panel panel-white">
             <div class="panel-heading">
                 <h6 class="panel-title text-semibold">Program / Kegiatan Badan Perencanaan Pembangunan Daerah</h6>
                 <div class="heading-elements">
@@ -57,7 +57,7 @@
                         <tr>
                             <td>{{ $program['id'] }}</td>
                             <td>{{ $program['name'] }}</td>
-                            <td>Rp.{{ number_format($program['budget'],2,",",".") }}
+                            <td>Rp.{{ number_format($program['budget'],2,",",".") }}</td>
                             <td>25%</td>
                             <td>50%</td>
                             <td>75%</td>
@@ -65,7 +65,7 @@
                             <td class="text-semibold">Rp.{{ number_format($program['budget'],2,",",".") }}</td>
                             <td class="text-semibold">100%</td>
                             <td class="text-center">
-                                <a href="#" class="btn btn-raised btn-primary">
+                                <a href="{{ url('program', $program['id']) }}" class="btn btn-raised btn-primary">
                                     Lihat Detil
                                 </a>
                             </td>
@@ -75,7 +75,7 @@
                 </table>
             </div>
         </div>
-        <!-- END ACTIVITIES TABLE -->
+        <!-- END PROGRAM TABLE -->
 
     </div>
     <!-- END CONTENT -->
@@ -83,5 +83,4 @@
 
 @section('scripts')
     @parent
-    <script type="text/javascript" src="{{ asset('assets/js/pages/activities.js') }}"></script>
 @endsection

@@ -29,13 +29,13 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="{{ Request::is('program') ? 'active' : '' }}">
+                    <li class="{{ Request::is('program*') || Request::is('kegiatan*') ? 'active' : '' }}">
                         <a href="{{ url('program') }}">
                             <i class="icon-calendar"></i> 
                             <span>Program / Kegiatan</span>
                         </a>
                     </li>
-                    <li class="{{ Request::is('anggaran') ? 'active' : '' }}">
+                    <li class="{{ Request::is('anggaran*') ? 'active' : '' }}">
                         <a href="{{ url('anggaran') }}">
                             <i class="icon-cash"></i> 
                             <span>Anggaran</span>
