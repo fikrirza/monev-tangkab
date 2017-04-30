@@ -40,3 +40,16 @@
 .panel-body.table-responsive {
     padding-top: 0;
 }
+
+.panel.panel-stats h6 {
+    margin-bottom: 0;
+}
+
+.panel .panel-body .chart-heading {
+    text-align: center !important;
+    margin-bottom: 25px;
+}
+
+.panel .panel-body .chart-heading h1 {
+    margin: 0;
+}
