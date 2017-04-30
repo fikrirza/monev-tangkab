@@ -1,4 +1,4 @@
-<div class="panel panel-body bg-{{ $color or 'blue' }}-400 has-bg-image" style="{{ $style or ''}}">
+<div class="panel panel-body panel-stats bg-{{ $color or 'blue' }}-400 has-bg-image" style="{{ $style or ''}}">
     <div class="media no-margin">
         <div class="media-body">
             <h3 class="no-margin">{{ $value }}</h3>
