@@ -12,9 +12,7 @@
 */
 
 // --- DashboardController
-Route::get('/', 'DashboardController@getIndex');
+Route::get('/', 'DashboardController@index');
 
-// --- ActivityController
-Route::get('/program'     , 'ActivityController@getProgramIndex');
-Route::get('/program/{id}', 'ActivityController@getProgramDetail');
-Route::get('/program/buat', 'ActivityController@getProgramCreate');
+// --- ProgramController
+Route::resource('program', 'ProgramController');
