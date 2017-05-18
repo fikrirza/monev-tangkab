@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Program;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 
 class ActivityController extends Controller
@@ -25,11 +27,11 @@ class ActivityController extends Controller
     {
         // Untuk sementara, data program dan kegiatan ditempatkan di service.
         $service = resolve('Services\Activity');
-        $data    = $service->getProgramData();
+        $data    = Activity::find($id);
         
         return View('pages.activity.show', [
-            'program'  => $data[0],
-            'activity' => $data[0]['activities'][0]
+            'program'  => $data->program,
+            'activity' => $data
         ]);
     }
 

@@ -32,7 +32,7 @@ $(function() {
         var searching = $(this).data("searching");
         var actions   = $(this).data("actions");
 
-        if (!sort) {
+        if (sort == null) {
             sort = 0;
         }
 

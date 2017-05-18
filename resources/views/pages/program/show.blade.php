@@ -3,11 +3,11 @@
 @section('content')
     @component('components.header')
         @slot('title')
-            {{  $program['name'] }}
+            {{  $program->name }}
         @endslot
 
         @slot('description')
-            {{ $program['description'] }}
+            {{ $program->summary }}
         @endslot
 
         @slot('breadcrumb')
@@ -17,7 +17,7 @@
                 </a>
             </li>
             <li class="active">
-                {{ $program['name'] }}
+                {{ $program->name }}
             </li>
         @endslot
     @endcomponent
@@ -29,6 +29,18 @@
         <div class="panel panel-white">
             <div class="panel-heading">
                 <h6 class="panel-title text-semibold">Indikator Program</h6>
+
+                <div class="heading-elements">
+                    @if (Auth::check())
+                        @if (Auth::user()->skpd_id == $program->skpd_id)
+                            
+                        @endif
+                    @endif
+
+                    <a href="{{ url('program', [$program->id, 'ubah']) }}" class="btn btn-primary btn-raised">
+                        Ubah Realisasi
+                    </a>
+                </div>
             </div>
             <div class="panel-body table-responsive">
                 <table class="table table-bordered datatable" data-paging="false" data-show-info="false">
@@ -47,12 +59,11 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{{ $program['description'] }}</td>
-                            <td>Rp.{{ number_format($program['budget'],2,",",".") }}
-                            <td>{{ $program['target'][0] }}%</td>
-                            <td>{{ $program['target'][1] }}%</td>
-                            <td>{{ $program['target'][2] }}%</td>
-                            <td>{{ $program['target'][3] }}%</td>
+                            <td>{{ $program->summary }}</td>
+                            <td>Rp.{{ number_format($program->activities()->sum('budget'),2,",",".") }}
+                             @foreach ($program->results as $result)
+                                <td>{{ $result->value }}%</td>
+                            @endforeach
                         </tr>
                     </tbody>
                 </table>
@@ -64,11 +75,6 @@
         <div class="panel panel-white">
             <div class="panel-heading">
                 <h6 class="panel-title text-semibold">Daftar Kegiatan</h6>
-                <div class="heading-elements">
-                    <a href="{{ url('kegiatan/buat?program=' . $program['id']) }}" class="btn btn-raised btn-success">
-                        Tambah Kegiatan
-                    </a>
-                </div>
             </div>
             <div class="panel-body table-responsive">
                 <table class="table table-bordered datatable">
@@ -91,19 +97,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($program['activities'] as $activity)
+                        @foreach ($program->activities()->get() as $activity)
                         <tr>
-                            <td>{{ $activity['id'] }}</td>
-                            <td>{{ $activity['name'] }}</td>
-                            <td>Rp.{{ number_format($activity['budget'],2,",",".") }}</td>
-                            <td>25%</td>
-                            <td>50%</td>
-                            <td>75%</td>
-                            <td>100%</td>
-                            <td class="text-semibold">Rp.{{ number_format($activity['budget'],2,",",".") }}</td>
+                            <td>{{ $activity->id }}</td>
+                            <td>{{ $activity->name }}</td>
+                            <td>Rp.{{ number_format($activity->budget,2,",",".") }}</td>
+                            @foreach ($activity->results()->orderBy('stage')->get() as $result)
+                                @if ($loop->index > 3)
+                                    @break
+                                @endif
+
+                                <td>{{ $result->value }}%</td>
+                            @endforeach
+                            <td class="text-semibold">Rp.{{ number_format($activity->budget,2,",",".") }}</td>
                             <td class="text-semibold">100%</td>
                             <td class="text-center">
-                                <a href="{{ url('kegiatan/' . $activity['id'] . '?program=' . $program['id']) }}" class="btn btn-raised btn-primary">
+                                <a href="{{ url('kegiatan/' . $activity->id) }}" class="btn btn-raised btn-primary">
                                     Lihat Detil
                                 </a>
                             </td>

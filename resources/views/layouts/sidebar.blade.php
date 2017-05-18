@@ -41,8 +41,20 @@
                             <span>Anggaran</span>
                         </a>
                     </li>
-                    
 
+                    <li class="{{ Request::is('target*') ? 'active' : '' }}">
+                        <a href="{{ url('target') }}">
+                            <i class="icon-target2"></i> 
+                            <span>Target</span>
+                        </a>
+                    </li>
+                    
+                    <li class="{{ Request::is('realisasi*') ? 'active' : '' }}">
+                        <a href="{{ url('realisasi') }}">
+                            <i class="icon-checkmark3"></i> 
+                            <span>Realisasi</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

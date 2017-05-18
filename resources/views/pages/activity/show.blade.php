@@ -3,11 +3,11 @@
 @section('content')
     @component('components.header')
         @slot('title')
-            {{  $program['name'] }}
+            {{ $activity->name }}
         @endslot
 
         @slot('description')
-            {{ $program['description'] }}
+            {{ $activity->program->summary }}
         @endslot
 
         @slot('breadcrumb')
@@ -17,12 +17,12 @@
                 </a>
             </li>
             <li>
-                <a href="{{ url('program', $program['id']) }}">
-                    {{ $program['name'] }}
+                <a href="{{ url('program', $activity->program->id) }}">
+                    {{ $program->name }}
                 </a>
             </li>
             <li class="active">
-                {{ $activity['name'] }}
+                {{ $activity->name }}
             </li>
         @endslot
     @endcomponent
@@ -34,6 +34,18 @@
         <div class="panel panel-white">
             <div class="panel-heading">
                 <h6 class="panel-title text-semibold">{{ $activity['name'] }}</h6>
+
+                <div class="heading-elements">
+                    @if (Auth::check())
+                        @if (Auth::user()->skpd_id == $program->skpd_id)
+                            
+                        @endif
+                    @endif
+
+                    <a href="{{ url('realisasi/buat?kegiatan=' . $activity->id) }}" class="btn btn-primary btn-raised">
+                        Realisasi Kegiatan
+                    </a>
+                </div>
             </div>
             <div class="panel-body table-responsive">
                 <table class="table table-bordered datatable" data-paging="false" data-show-info="false" data-searching="false" data-ordering="false">
@@ -53,91 +65,36 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Masukan</td>
-                            <td>{{ $activity['input']['type'] }}</td>
-                            <td class="text-semibold">
-                                @if ($activity['input']['unitType'] == 'prefix')
-                                    {{ $activity['input']['unit'] }}
-                                @endif
-
-                                {{ number_format($activity['input']['target'],2,",",".") }}
-
-                                @if ($activity['input']['unitType'] == 'suffix')
-                                    {{ $activity['input']['unit'] }}
-                                @endif
-                            </td>
-                            <td colspan="5" class="text-center"> N / A </td>
-                            @for ($i = 0; $i < 4; $i++)
-                                <td style="display: none;"></td>
-                            @endfor
-                        </tr>
-                        <tr>
-                            <td>Keluaran</td>
-                            <td>{{ $activity['output']['type'] }}</td>
-                            <td class="text-semibold">
-                                @if ($activity['output']['unitType'] == 'prefix')
-                                    {{ $activity['output']['unit'] }}
-                                @endif
-
-                                {{ number_format($activity['output']['target'],0,",",".") }}
-
-                                @if ($activity['output']['unitType'] == 'suffix')
-                                    {{ $activity['output']['unit'] }}
-                                @endif
-                            </td>
-                            @for ($i = 0; $i < 4; $i++)
+                        @foreach ($activity->indicators as $indicator)
+                            <tr>
+                                <td>{{ $indicator->name }}</td>
+                                <td>{{ $indicator->description }}</td>
                                 <td>
-                                    @if ($activity['output']['unitType'] == 'prefix')
-                                        {{ $activity['output']['unit'] }}
-                                    @endif
-
-                                    {{ number_format($activity['output']['realization'][$i],0,",",".") }}
-
-                                    @if ($activity['output']['unitType'] == 'suffix')
-                                        {{ $activity['output']['unit'] }}
+                                    @if ($indicator->unit == null)
+                                        Rp.{{ number_format($indicator->target,2,',','.') }}
+                                    @else
+                                        {{ $indicator->target . ' ' . $indicator->unit }} 
                                     @endif
                                 </td>
-                            @endfor
-                            <td>
-                                <a href="{{ url('kegiatan/' . $activity['id'] . '/ubah?type=output') }}" class="btn btn-raised btn-primary">
-                                    Ubah
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Hasil</td>
-                            <td>{{ $activity['result']['type'] }}</td>
-                            <td class="text-semibold">
-                                @if ($activity['result']['unitType'] == 'prefix')
-                                    {{ $activity['result']['unit'] }}
+                                @if ($indicator->unit == null)
+                                    <td class="text-center" colspan="5">
+                                        -
+                                    </td>
+                                    @for ($i = 0; $i < 4; $i++)
+                                        <td style="display: none;"></td>
+                                    @endfor
+                                @else
+                                    @foreach ($indicator->results as $result)
+                                        <td>{{ $result->value . ' ' . $indicator->unit }}</td>
+                                    @endforeach
+                                    <td>
+                                        <a href="{{ url('indikator', [ $indicator->id, 'ubah' ]) }}" class="btn btn-raised btn-primary">
+                                            Ubah
+                                        </a>
+                                    </td>
                                 @endif
-
-                                {{ number_format($activity['result']['target'],0,",",".") }}
-
-                                @if ($activity['result']['unitType'] == 'suffix')
-                                    {{ $activity['result']['unit'] }}
-                                @endif
-                            </td>
-                            @for ($i = 0; $i < 4; $i++)
-                                <td>
-                                    @if ($activity['result']['unitType'] == 'prefix')
-                                        {{ $activity['result']['unit'] }}
-                                    @endif
-
-                                    {{ number_format($activity['result']['realization'][$i],0,",",".") }}
-
-                                    @if ($activity['result']['unitType'] == 'suffix')
-                                        {{ $activity['result']['unit'] }}
-                                    @endif
-                                </td>
-                            @endfor
-                            <td>
-                                <a href="{{ url('kegiatan/' . $activity['id'] . '/ubah?type=result') }}" class="btn btn-raised btn-primary">
-                                    Ubah
-                                </a>
-                            </td>
-                        </tr>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -164,13 +121,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($activity['executor'] as $executor)
+                        @foreach ($activity->executors as $executor)
                             <tr>
-                                <td>{{ $executor['id'] }}</td>
-                                <td>{{ $executor['name'] }}</td>
-                                <td>Rp.{{ number_format($executor['budget'],2,",",".") }}</td>
-                                <td>Rp.{{ number_format($executor['realization']['financial'],2,",",".") }}</td>
-                                <td>{{ number_format($executor['realization']['physical'],0,",",".") }}%</td>
+                                <td>{{ $executor->id }}</td>
+                                <td>{{ $executor->name }}</td>
+                                <td>Rp.{{ number_format($executor->budget,2,",",".") }}</td>
+                                <td>Rp.{{ number_format($executor->financial,2,",",".") }}</td>
+                                <td>{{ number_format($executor->physical,0,",",".") }}%</td>
                             </tr>
                         @endforeach
                     </tbody>

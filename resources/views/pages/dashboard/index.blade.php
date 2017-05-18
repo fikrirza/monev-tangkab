@@ -192,43 +192,6 @@
 
         </div>
 
-        <div class="panel">
-            <div class="panel-heading">
-                <h6 class="panel-title text-semibold">KPA Kinerja Terendah</h6>
-            </div>
-            <div class="table-responsive">
-                <table class="table datatable" data-sort="2" data-actions="copy,csv,excel,pdf,print">
-                    <thead>
-                        <tr>
-                            <th>KPA</th>
-                            <th>Anggaran</th>
-                            <th>Deviasi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <a href="#">
-                                    <div class="media-left">
-                                        <span class="text-default text-semibold">Ir. Agung Suryatno</span>
-                                        <div class="text-muted text-size-small">
-                                            Kepala Dinas Energi dan Sumber Daya Mineral
-                                        </div>
-                                    </div>
-                                </a>
-                            </td>
-                            <td>
-                                Rp.10.211.061.000
-                            </td>
-                            <td>
-                                -45.83
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
     </div>
     <!-- END CONTENT -->
 @endsection

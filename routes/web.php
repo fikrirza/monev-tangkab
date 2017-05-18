@@ -20,5 +20,11 @@ Route::resource('program', 'ProgramController');
 // --- ActivityController
 Route::resource('kegiatan', 'ActivityController');
 
+// --- IndicatorContorller
+Route::resource('indikator', 'IndicatorController', [ 'only' => ['edit', 'update']]);
+
+// --- RealizationController
+Route::resource('realisasi', 'RealizationController', [ 'only' => ['index', 'create', 'store', 'update']]);
+
 // --- BudgetController
-Route::get('/anggaran', 'BudgetController@index');
+Route::get('anggaran', 'BudgetController@index');

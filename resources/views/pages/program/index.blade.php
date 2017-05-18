@@ -1,15 +1,13 @@
 @extends("layouts.base")
 
-{{-- Lihat ActivityController untuk melihat data mock --}}
-
 @section('content')
     @component('components.header')
         @slot('title')
-            Program / Kegiatan
+            Program dan Kegiatan
         @endslot
 
         @slot('description')
-            Review data kegiatan yang sudah terdaftar.
+            Review data program dan kegiatan.
         @endslot
 
         @slot('breadcrumb')
@@ -25,15 +23,22 @@
         <!-- PROGRAM TABLE -->
         <div class="panel panel-white">
             <div class="panel-heading">
-                <h6 class="panel-title text-semibold">Program / Kegiatan Badan Perencanaan Pembangunan Daerah</h6>
+                <h6 class="panel-title text-semibold">
+                    Program / Kegiatan Badan Perencanaan Pembangunan Daerah 
+                    @if ($skpd != null)
+                    - {{ $skpd->name }}
+                    @endif
+                </h6>
                 <div class="heading-elements">
-                    <a href="{{ url('program/buat') }}" class="btn btn-raised btn-success">
-                        Tambah Program
-                    </a>
+                    @if (Auth::check())
+                        @if (Auth::user()->skpd_id == $program->skpd_id)
+                            
+                        @endif
+                    @endif
                 </div>
             </div>
             <div class="panel-body table-responsive">
-                <table class="table table-bordered datatable">
+                <table class="table table-bordered datatable" data-sort="0" data-sort-type="asc">
                     <thead>
                         <tr>
                             <th rowspan="2">Kode</th>
@@ -55,17 +60,23 @@
                     <tbody>
                         @foreach ($programs as $program)
                         <tr>
-                            <td>{{ $program['id'] }}</td>
-                            <td>{{ $program['name'] }}</td>
-                            <td>Rp.{{ number_format($program['budget'],2,",",".") }}</td>
-                            <td>25%</td>
-                            <td>50%</td>
-                            <td>75%</td>
-                            <td>100%</td>
-                            <td class="text-semibold">Rp.{{ number_format($program['budget'],2,",",".") }}</td>
+                            <td>{{ $program->id }}</td>
+                            <td>{{ $program->name }}</td>
+                            <td>Rp.{{ number_format($program->activities()->sum('budget'),2,",",".") }}</td>
+                            @if ($program->results->count() > 0)
+                                @foreach ($program->results as $result)
+                                    <td>{{ $result->value }}%</td>
+                                @endforeach
+                            @else
+                                <td>25%</td>
+                                <td>50%</td>
+                                <td>75%</td>
+                                <td>100%</td>
+                            @endif
+                            <td class="text-semibold">Rp.{{ number_format($program->activities()->sum('budget'),2,",",".") }}</td>
                             <td class="text-semibold">100%</td>
                             <td class="text-center">
-                                <a href="{{ url('program', $program['id']) }}" class="btn btn-raised btn-primary">
+                                <a href="{{ url('program', $program->id) }}" class="btn btn-raised btn-primary">
                                     Lihat Detil
                                 </a>
                             </td>
