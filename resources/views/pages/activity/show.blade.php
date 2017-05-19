@@ -38,13 +38,13 @@
                 <div class="heading-elements">
                     @if (Auth::check())
                         @if (Auth::user()->skpd_id == $program->skpd_id)
-                            
+                            <a href="{{ url('realisasi/buat?kegiatan=' . $activity->id) }}" class="btn btn-primary btn-raised">
+                                Realisasi Kegiatan
+                            </a>
                         @endif
                     @endif
 
-                    <a href="{{ url('realisasi/buat?kegiatan=' . $activity->id) }}" class="btn btn-primary btn-raised">
-                        Realisasi Kegiatan
-                    </a>
+                    
                 </div>
             </div>
             <div class="panel-body table-responsive">
@@ -55,7 +55,11 @@
                             <th rowspan="2">Tolak Ukur</th>
                             <th rowspan="2">Target</th>
                             <th colspan="4" class="text-center">Realisasi</th>
-                            <th rowspan="2" class="text-center">Aksi</th>
+                            @if (Auth::check())
+                                @if (Auth::user()->skpd_id == $program->skpd_id)
+                                    <th rowspan="2" class="text-center">Aksi</th>
+                                @endif
+                            @endif
                         </tr>
                         <tr>
                             <td>I</td>
@@ -80,18 +84,30 @@
                                     <td class="text-center" colspan="5">
                                         -
                                     </td>
-                                    @for ($i = 0; $i < 4; $i++)
+                                    @php($loopCount = 3)
+                                    @if (Auth::check())
+                                        @if (Auth::user()->skpd_id == $program->skpd_id)
+                                            @php($loopCount = 4)
+                                        @endif
+                                    @endif
+
+                                    @for ($i = 0; $i < $loopCount; $i++)
                                         <td style="display: none;"></td>
-                                    @endfor
+                                    @endfor                       
                                 @else
                                     @foreach ($indicator->results as $result)
                                         <td>{{ $result->value . ' ' . $indicator->unit }}</td>
                                     @endforeach
-                                    <td>
-                                        <a href="{{ url('indikator', [ $indicator->id, 'ubah' ]) }}" class="btn btn-raised btn-primary">
-                                            Ubah
-                                        </a>
-                                    </td>
+                                    @if (Auth::check())
+                                        @if (Auth::user()->skpd_id == $program->skpd_id)
+                                            <td>
+                                                <a href="{{ url('indikator', [ $indicator->id, 'ubah' ]) }}" class="btn btn-raised btn-primary">
+                                                    Ubah
+                                                </a>              
+                                            </td>
+                                        @endif
+                                    @endif
+
                                 @endif
                             </tr>
                         @endforeach

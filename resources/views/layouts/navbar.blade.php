@@ -19,9 +19,10 @@
         <div class="navbar-right">
             <ul class="nav navbar-nav">       
                 <li>
-                    <a href="#">
-                        {{-- <i class="icon-switch"></i> --}} Login / Logout
-                    </a>
+                    <form action="{{ url('logout') }}" method="POST">
+                        {{ csrf_field() }}
+                        <input type="submit" value="Logout" class="btn btn-flat"/>
+                    </form>
                 </li>                 
             </ul>
         </div>

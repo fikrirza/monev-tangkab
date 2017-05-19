@@ -29,10 +29,15 @@
                     - {{ $skpd->name }}
                     @endif
                 </h6>
-                <div class="heading-elements">
+                <div class="heading-elements" style="min-width: 200px;">
                     @if (Auth::check())
-                        @if (Auth::user()->skpd_id == $program->skpd_id)
-                            
+                        @if (Auth::user()->skpd_id == null || Auth::user()->skpd_id == '1.01.01.00')
+                            <select class="select" onchange="window.location='{{ url('program?skpd=') }}' + this.value">
+                                <option value="" {{ Request::get('skpd') == null ? 'selected' : '' }}>Semua</option> 
+                                @foreach(\App\Models\Skpd::all() as $dinas)
+                                    <option value="{{ $dinas->id }}" {{ Request::get('skpd') == $dinas->id ? 'selected' : '' }}>{{ $dinas->name }}</option>
+                                @endforeach
+                            </select>
                         @endif
                     @endif
                 </div>

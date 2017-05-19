@@ -33,13 +33,11 @@
                 <div class="heading-elements">
                     @if (Auth::check())
                         @if (Auth::user()->skpd_id == $program->skpd_id)
-                            
+                            <a href="{{ url('program', [$program->id, 'ubah']) }}" class="btn btn-primary btn-raised">
+                                Ubah Realisasi
+                            </a>
                         @endif
                     @endif
-
-                    <a href="{{ url('program', [$program->id, 'ubah']) }}" class="btn btn-primary btn-raised">
-                        Ubah Realisasi
-                    </a>
                 </div>
             </div>
             <div class="panel-body table-responsive">

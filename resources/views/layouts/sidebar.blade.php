@@ -3,14 +3,16 @@
     <div class="sidebar-content">
 
         <!-- User menu -->
+        @if (Auth::check())
         <div class="sidebar-user-material">
             <div class="category-content">
                 <div class="sidebar-user-material-content">
-                    <h6>BAPPEDA</h6>
-                    <span class="text-size-small">@@bappeda</span>
+                    <h6>{{ Auth::user()->name }}</h6>
+                    <span class="text-size-small">{{ '@' . Auth::user()->username }}</span>
                 </div>
             </div>
         </div>
+        @endif
         <!-- /user menu -->
 
 

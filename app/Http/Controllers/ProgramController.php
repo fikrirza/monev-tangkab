@@ -13,9 +13,14 @@ class ProgramController extends Controller
 {
     public function index(Request $request)
     {
-        // Ambil data program dari database
+        $default = null;
+        if (Auth::check())
+        {
+            $default = Auth::user()->skpd_id;
+        }
+
         $data = null;
-        $skpd = $request->input('skpd', null);
+        $skpd = $request->input('skpd', $default);
         if ($skpd == null)
         {
             $data = Program::all();

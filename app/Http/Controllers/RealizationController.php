@@ -6,13 +6,36 @@ use App\Models\Activity;
 use App\Models\Realization;
 use App\Models\Termin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RealizationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $realizations = Realization::all();
+        $default = null;
+        if (Auth::check())
+        {
+            $default = Auth::user()->skpd_id;
+        }
+
+        $realizations = null;
+        $skpd = $request->input('skpd', $default);
+
+        if ($skpd == null)
+        {
+            $realizations = Realization::all();
+        }
+        else
+        {
+            $realizations = Realization::whereHas('activity', function($query) use($skpd) {
+                $query->whereHas('program', function($subQuery) use($skpd) {
+                    $subQuery->where('skpd_id', $skpd);
+                });
+            })->get();
+        }
+
         return View('pages.realization.index', [
+            'skpd'         => $skpd != null ? Skpd::find($skpd) : null,
             'realizations' => $realizations
         ]);
     }
