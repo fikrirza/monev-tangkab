@@ -120,7 +120,7 @@
         <!-- ACTIVITY EXECUTOR TABLE -->
         <div class="panel panel-white">
             <div class="panel-heading">
-                <h6 class="panel-title text-semibold">Pelaksana Kegiatan</h6>
+                <h6 class="panel-title text-semibold">Item Kegiatan</h6>
             </div>
             <div class="panel-body table-responsive">
                 <table class="table table-bordered datatable">

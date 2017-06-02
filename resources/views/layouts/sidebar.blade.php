@@ -57,6 +57,13 @@
                             <span>Realisasi</span>
                         </a>
                     </li>
+
+                    <li class="{{ Request::is('laporan*') ? 'active' : '' }}">
+                        <a href="{{ url('laporan') }}">
+                            <i class="icon-three-bars"></i> 
+                            <span>Laporan Triwulan</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

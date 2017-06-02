@@ -1,7 +1,5 @@
 @extends("layouts.base")
 
-{{-- Lihat DashboardController untuk melihat data mock --}}
-
 @section('content')
     @component('components.header')
         @slot('title')

@@ -21,6 +21,7 @@ Auth::routes();
     Route::get('/', 'DashboardController@index');
 
     // --- ProgramController
+    Route::get('laporan', 'ProgramController@report');
     Route::resource('program', 'ProgramController');
 
     // --- ActivityController

@@ -20,8 +20,8 @@ class ProgramController extends Controller
         }
 
         $data = null;
-        $skpd = $request->input('skpd', $default);
-        if ($skpd == null)
+        $skpd = $request->input('skpd');
+        if ($skpd == null || ($skpd == null && $default == '1.01.01.00'))
         {
             $data = Program::all();
         }
@@ -91,5 +91,30 @@ class ProgramController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function report(Request $request)
+    {
+        $default = null;
+        if (Auth::check())
+        {
+            $default = Auth::user()->skpd_id;
+        }
+
+        $data = null;
+        $skpd = $request->input('skpd');
+        if ($skpd == null || ($skpd == null && $default == '1.01.01.00'))
+        {
+            $data = Program::all();
+        }
+        else
+        {
+            $data = Program::onSkpd($skpd)->get();
+        }
+
+        return View('pages.report.index', [
+            'skpd'     => $skpd != null ? Skpd::find($skpd) : null,
+            'programs' => $data
+        ]);
     }
 }
