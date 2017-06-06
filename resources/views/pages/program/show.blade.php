@@ -1,13 +1,79 @@
 @extends("layouts.base")
 
+@section('modals')
+
+    <!-- PROGRAM MODAL  -->
+    <div id="program-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title">Capaian Program</h5>
+                </div>
+
+                <form action="{{ url('program', [ $program->id ]) }}" method="POST">
+                    {{ csrf_field() }}
+                    {{ method_field('PATCH') }}
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label>Triwulan I</label>
+                                    <input type="number" value="{{ $program->capaian[0] or '' }}" name="capaian[]" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label>Triwulan II</label>
+                                    <input type="number" value="{{ $program->capaian[1] or '' }}" name="capaian[]" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label>Triwulan III</label>
+                                    <input type="number" value="{{ $program->capaian[2] or '' }}" name="capaian[]" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label>Triwulan IV</label>
+                                    <input type="number" value="{{ $program->capaian[3] or '' }}" name="capaian[]" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary btn-raised">Ubah Data</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <!-- /PROGRAM MODAL  -->
+
+@endsection
+
 @section('content')
     @component('components.header')
         @slot('title')
-            {{  $program->name }}
+            {{  $program->nama }}
         @endslot
 
         @slot('description')
-            {{ $program->summary }}
+            {{ $program->uraian }}
         @endslot
 
         @slot('breadcrumb')
@@ -17,13 +83,18 @@
                 </a>
             </li>
             <li class="active">
-                {{ $program->name }}
+                {{ $program->nama }}
             </li>
         @endslot
     @endcomponent
 
     <!-- CONTENT -->
     <div class="content">
+
+        <!-- ALERT NOTIFICATION -->
+        @include('components.alert.error')
+        @include('components.alert.success')
+        <!-- /ALERT NOTIFICATION -->
 
         <!-- INDICATOR TABLE -->
         <div class="panel panel-white">
@@ -33,15 +104,15 @@
                 <div class="heading-elements">
                     @if (Auth::check())
                         @if (Auth::user()->skpd_id == $program->skpd_id)
-                            <a href="{{ url('program', [$program->id, 'ubah']) }}" class="btn btn-primary btn-raised">
-                                Ubah Realisasi
+                            <a href="#" class="btn btn-primary btn-raised" data-toggle="modal" data-target="#program-modal">
+                                Ubah Capaian
                             </a>
                         @endif
                     @endif
                 </div>
             </div>
             <div class="panel-body table-responsive">
-                <table class="table table-bordered datatable" data-paging="false" data-show-info="false">
+                <table class="table table-bordered datatable" data-paging="false" data-show-info="false" data-searching="false">
                     <thead>
                         <tr>
                             <th rowspan="2">Uraian</th>
@@ -57,10 +128,10 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{{ $program->summary }}</td>
-                            <td>Rp.{{ number_format($program->activities()->sum('budget'),2,",",".") }}
-                             @foreach ($program->results as $result)
-                                <td>{{ $result->value }}%</td>
+                            <td>{{ $program->uraian }}</td>
+                            <td>Rp.{{ number_format($program->item()->sum('total'),2,",",".") }}
+                            @foreach ($program->capaian as $capaian)
+                                <td>{{ $capaian }}%</td>
                             @endforeach
                         </tr>
                     </tbody>
@@ -81,36 +152,28 @@
                             <th rowspan="2">Kode</th>
                             <th rowspan="2">Kegiatan</th>
                             <th rowspan="2">Jumlah Anggaran</th>
-                            <th colspan="4" class="text-center">Capaian</th>
                             <th colspan="2" class="text-center">Realisasi</th>
                             <th rowspan="2" class="text-center">Aksi</th>
                         </tr>
                         <tr>
-                            <td>I</td>
-                            <td>II</td>
-                            <td>III</td>
-                            <td>IV</td>
                             <td>Anggaran</td>
                             <td>Fisik</td>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($program->activities()->get() as $activity)
+                        @foreach ($program->kegiatan as $kegiatan)
                         <tr>
-                            <td>{{ $activity->id }}</td>
-                            <td>{{ $activity->name }}</td>
-                            <td>Rp.{{ number_format($activity->budget,2,",",".") }}</td>
-                            @foreach ($activity->results()->orderBy('stage')->get() as $result)
-                                @if ($loop->index > 3)
-                                    @break
-                                @endif
-
-                                <td>{{ $result->value }}%</td>
-                            @endforeach
-                            <td class="text-semibold">Rp.{{ number_format($activity->budget,2,",",".") }}</td>
-                            <td class="text-semibold">100%</td>
+                            <td>{{ $kegiatan->rekening }}</td>
+                            <td>{{ $kegiatan->nama }}</td>
+                            <td>Rp.{{ number_format($kegiatan->item->sum('total'),2,",",".") }}</td>
+                            <td class="text-semibold">
+                                Rp.{{ number_format($kegiatan->item->sum('realisasi'),2,",",".") }}
+                            </td>
+                            <td class="text-semibold">
+                                {{ $kegiatan->item->avg('fisik') }} %
+                            </td>
                             <td class="text-center">
-                                <a href="{{ url('kegiatan/' . $activity->id) }}" class="btn btn-raised btn-primary">
+                                <a href="{{ url('kegiatan/' . $kegiatan->id) }}" class="btn btn-raised btn-primary">
                                     Lihat Detil
                                 </a>
                             </td>

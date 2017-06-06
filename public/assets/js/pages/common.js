@@ -27,17 +27,19 @@ $(function() {
         var sort      = $(this).data("sort");
         var type      = $(this).data("sort-type");
         var paging    = $(this).data("paging");
+        var perpage   = $(this).data('perpage');
         var ordering  = $(this).data("ordering");
         var info      = $(this).data("show-info");
         var searching = $(this).data("searching");
         var actions   = $(this).data("actions");
+        var scroll    = $(this).data('scroll');
 
         if (sort == null) {
             sort = 0;
         }
 
         if (type !== 'asc' && type !== 'desc') {
-            type = 'none';
+            type = 'asc';
         }
 
         if (typeof paging === 'undefined') {
@@ -63,11 +65,23 @@ $(function() {
             }
         }
 
+        if (!scroll) {
+            scroll = null;
+        }
+        else {
+            scroll = "800px";
+        }
+
+        if (!perpage) {
+            perpage = 10;
+        }
+
         $(this).DataTable({
             ordering: ordering,
             paging: paging,
             info: info,
             aaSorting: [[sort, type]],
+            pageLength: perpage,
             buttons: {            
                 dom: {
                     button: {

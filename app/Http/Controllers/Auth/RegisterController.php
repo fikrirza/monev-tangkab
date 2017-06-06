@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -38,7 +36,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        Redirect::to('/')->send();
+        $this->middleware('guest');
     }
 
     /**
@@ -50,8 +48,8 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users',
+            'skpd_id'  => 'nullable|string|max:255',
             'password' => 'required|string|min:6|confirmed',
         ]);
     }
@@ -65,7 +63,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
+            'skpd_id'  => $data['skpd_id'],
             'username' => $data['username'],
             'password' => bcrypt($data['password']),
         ]);

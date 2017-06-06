@@ -2,119 +2,107 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Skpd;
-use App\Models\Program;
-use App\Models\ProgramResult;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\Skpd;
+use App\Models\Program;
+
 class ProgramController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
-        $default = null;
-        if (Auth::check())
-        {
-            $default = Auth::user()->skpd_id;
-        }
+        $user     = Auth::user();
+        $skpd     = Skpd::find($request->input('skpd', $user->skpd_id));
+        $programs = $skpd == null ? Program::all() : Program::where('skpd_id', $skpd->id)->get();
 
-        $data = null;
-        $skpd = $request->input('skpd');
-        if ($skpd == null || ($skpd == null && $default == '1.01.01.00'))
-        {
-            $data = Program::all();
-        }
-        else
-        {
-            $data = Program::onSkpd($skpd)->get();
-        }
-
+        $request->flash();
         return View('pages.program.index', [
-            'skpd'     => $skpd != null ? Skpd::find($skpd) : null,
-            'programs' => $data
+            'skpd'     => $skpd,
+            'programs' => $programs
         ]);
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         //
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
         //
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
-        // Untuk sementara, data program dan kegiatan ditempatkan di service.
-        $service = resolve('Services\Activity');
-        $data    = Program::find($id);
-        
         return View('pages.program.show', [
-            'program' => $data
+            'program' => Program::find($id)
         ]);
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function edit($id)
     {
-        $data = Program::find($id);
         return View('pages.program.edit', [
-            'program' => $data
+            'program' => Program::find($id)
         ]);
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'summary'     => 'required|string',
-            'realization' => 'required'
+            'capaian' => 'required'
         ]);
 
-        $program = Program::find($id);
-        $program->summary = $request->input('summary');
+        $program          = Program::find($id);
+        $program->capaian = $request->input('capaian');
         $program->save();
-
-        $stages = [ 'I', 'II', 'III', 'IV' ];
-        $realizations = $request->input('realization');
-        for ($i = 0; $i < 4; $i++)
-        {
-            $result = ProgramResult::where('program_id', $id)->where('stage', $stages[$i])->first();
-            $result->value = $realizations[$i];
-            $result->save();
-        }
 
         return redirect('program/' . $id)->with(['success' => true]);
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id)
     {
         //
-    }
-
-    public function report(Request $request)
-    {
-        $default = null;
-        if (Auth::check())
-        {
-            $default = Auth::user()->skpd_id;
-        }
-
-        $data = null;
-        $skpd = $request->input('skpd');
-        if ($skpd == null || ($skpd == null && $default == '1.01.01.00'))
-        {
-            $data = Program::all();
-        }
-        else
-        {
-            $data = Program::onSkpd($skpd)->get();
-        }
-
-        return View('pages.report.index', [
-            'skpd'     => $skpd != null ? Skpd::find($skpd) : null,
-            'programs' => $data
-        ]);
     }
 }

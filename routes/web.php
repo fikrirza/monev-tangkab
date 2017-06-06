@@ -14,26 +14,26 @@
 // -- Auth
 Auth::routes();
 
-    // -- Require authentication
-    Route::group(['middleware' => ['web', 'auth']], function () {
+// -- Require authentication
+Route::group(['middleware' => ['web', 'auth']], function () {
 
     // --- DashboardController
     Route::get('/', 'DashboardController@index');
 
     // --- ProgramController
-    Route::get('laporan', 'ProgramController@report');
     Route::resource('program', 'ProgramController');
 
     // --- ActivityController
-    Route::resource('kegiatan', 'ActivityController');
+    Route::resource('kegiatan', 'KegiatanController');
 
     // --- IndicatorContorller
-    Route::resource('indikator', 'IndicatorController', [ 'only' => ['edit', 'update']]);
-
-    // --- RealizationController
-    Route::resource('realisasi', 'RealizationController', [ 'only' => ['index', 'create', 'store', 'update']]);
+    Route::resource('indikator', 'IndikatorController', [ 'only' => ['edit', 'update']]);
 
     // --- BudgetController
-    Route::get('anggaran', 'BudgetController@index');
+    Route::get('anggaran', 'AnggaranController@index');
+
+    // --- RealizationController
+    Route::get('laporan', 'RealisasiController@laporan');
+    Route::resource('realisasi', 'RealisasiController', [ 'only' => ['index', 'create', 'store', 'update']]);
 
 });

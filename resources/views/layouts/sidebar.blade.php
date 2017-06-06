@@ -7,7 +7,11 @@
         <div class="sidebar-user-material">
             <div class="category-content">
                 <div class="sidebar-user-material-content">
-                    <h6>{{ Auth::user()->name }}</h6>
+                    @if (Auth::user()->skpd_id != null)
+                        <h6>{{ Auth::user()->skpd->nama }}</h6>
+                    @else
+                        <h6>Publik</h6>
+                    @endif
                     <span class="text-size-small">{{ '@' . Auth::user()->username }}</span>
                 </div>
             </div>
@@ -37,27 +41,7 @@
                             <span>Program / Kegiatan</span>
                         </a>
                     </li>
-                    <li class="{{ Request::is('anggaran*') ? 'active' : '' }}">
-                        <a href="{{ url('anggaran') }}">
-                            <i class="icon-cash"></i> 
-                            <span>Anggaran</span>
-                        </a>
-                    </li>
-
-                    <li class="{{ Request::is('target*') ? 'active' : '' }}">
-                        <a href="{{ url('target') }}">
-                            <i class="icon-target2"></i> 
-                            <span>Target</span>
-                        </a>
-                    </li>
                     
-                    <li class="{{ Request::is('realisasi*') ? 'active' : '' }}">
-                        <a href="{{ url('realisasi') }}">
-                            <i class="icon-checkmark3"></i> 
-                            <span>Realisasi</span>
-                        </a>
-                    </li>
-
                     <li class="{{ Request::is('laporan*') ? 'active' : '' }}">
                         <a href="{{ url('laporan') }}">
                             <i class="icon-three-bars"></i> 

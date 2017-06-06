@@ -17,6 +17,10 @@
     <!-- CONTENT -->
     <div class="content">
 
+        <!-- ALERT NOTIFICATION -->
+        @include('components.alert.error')
+        <!-- /ALERT NOTIFICATION -->
+
         <!-- STATISTICS -->
         <div class="row">
 
@@ -26,7 +30,7 @@
                         fa fa-clone fa-3x
                     @endslot
                     @slot('value')
-                        528
+                        {{ count($program) }}
                     @endslot
                     
 
@@ -43,7 +47,7 @@
                         fa fa-calendar fa-3x
                     @endslot
                     @slot('value')
-                        1842
+                        {{ count($kegiatan) }}
                     @endslot
                     
 
@@ -60,11 +64,11 @@
                         fa fa-tasks fa-3x
                     @endslot
                     @slot('value')
-                        1936
+                        {{ count($item) }}
                     @endslot
                     
 
-                    sub kegiatan
+                    item kegiatan
                 @endcomponent
             </div>
 
@@ -74,14 +78,14 @@
                         orange
                     @endslot
                     @slot('icon')
-                        fa fa-cubes fa-3x
+                        fa fa-info-circle fa-3x
                     @endslot
                     @slot('value')
-                        14.372
+                        {{ count($indikator) }}
                     @endslot
                     
 
-                    item kegiatan
+                    indikator
                 @endcomponent
             </div>
 
@@ -90,103 +94,6 @@
         <!-- END STATISTICS -->
 
         <div class="row">
-            <!-- REALIZATION GRAPH -->
-            <div class="col-md-7 col-sm-12">
-                <div class="panel">
-                    <div class="panel-heading">
-                        <h6 class="panel-title text-semibold">Realisasi Fisik dan Keuangan</h6>
-                        <div class="heading-elements">
-                            <ul class="icons-list">
-                                <li><a data-action="collapse"></a></li>
-                                <li><a data-action="reload"></a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="panel-body">
-                        <div class="chart-container">
-                            <div class="chart" id="graph"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END REALIZATION GRAPH -->
-
-            <!-- REALIZATION TABLE -->
-            <div class="col-md-5 col-sm-12">
-                <div class="panel">
-                    <div class="panel-heading">
-                        <h6 class="panel-title text-semibold">Tabel Realisasi</h6>
-                        <div class="heading-elements">
-                            <ul class="icons-list">
-                                <li><a data-action="collapse"></a></li>
-                                <li><a data-action="reload"></a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="panel-body" style="margin-bottom:18px;">
-                        <table class="table table-bordered">
-                            <thead >
-                                <tr>
-                                    <th class="text-center" rowspan="2">Triwulan</th>
-                                    <th class="text-center" colspan="2">Keuangan</th>
-                                    <th class="text-center" colspan="2">Fisik</th>
-                                </tr>
-                                <tr>
-                                    <th class="text-center">Target</th>
-                                    <th class="text-center">Realisasi</th>
-                                    <th class="text-center">Target</th>
-                                    <th class="text-center">Realisasi</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-center">
-                                @for ($i = 0; $i < 4; $i++)
-                                    <tr>
-                                        <td>{{ $i + 1 }}</td>
-                                        <td>
-                                            {{ $target['financial'][$i] }}%
-                                        </td>
-                                        <td>
-                                            <span class="text-{{ $realization['financial'][$i] >= $target['financial'][$i] ? 'success' : 'danger' }}">
-                                                {{ $realization['financial'][$i] }}%
-                                            </span>
-                                        </td>
-                                        <td>
-                                            {{ $target['physical'][$i] }}%
-                                        </td>
-                                        <td>
-                                            <span class="text-{{ $realization['physical'][$i] >= $target['physical'][$i] ? 'success' : 'danger' }}">
-                                                {{ $realization['physical'][$i] }}%
-                                            </span>
-                                        </td>
-                                    </tr>
-                                @endfor
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- BUDGET STATISTIC -->
-                @component('components.widgets.statistic')
-                    
-                    @slot('color')
-                        slate
-                    @endslot
-                    @slot('icon')
-                        fa fa-archive fa-3x
-                    @endslot
-                    @slot('value')
-                        Rp.1.176.302.017.342,00
-                    @endslot
-                    
-
-                    Anggaran Daerah
-                @endcomponent
-                <!-- END BUDGET STATISTIC -->
-
-            </div>
-            <!-- END REALIZATION TABLE -->
 
         </div>
 
@@ -196,35 +103,6 @@
 
 @section('scripts')
     @parent
-
-    <!-- Graph Data -->
-    <script type="text/javascript">
-        // Sementara untuk mockup, data yang digunakan adalah data mocking / dummy.
-        // HACK: Dibagi 100 karena masalah formatting untuk tanda persentase (%)
-        var graphData = [
-            ['Target Keuangan',    
-                @foreach($target['financial'] as $value)
-                    {{ $value / 100 }},
-                @endforeach
-            ],
-            ['Target Fisik',    
-                @foreach($target['physical'] as $value)
-                    {{ $value / 100 }},
-                @endforeach
-            ],
-
-            ['Realisasi Keuangan',    
-                @foreach($realization['financial'] as $value)
-                    {{ $value / 100 }},
-                @endforeach
-            ],
-            ['Realisasi Fisik',    
-                @foreach($realization['physical'] as $value)
-                    {{ $value / 100 }},
-                @endforeach
-            ],
-        ];
-    </script>
 
     <script type="text/javascript" src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endsection

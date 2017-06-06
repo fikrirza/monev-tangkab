@@ -26,8 +26,9 @@ class RouteServiceProvider extends ServiceProvider
         Route::resourceVerbs([
             'create' => 'buat',
             'edit'   => 'ubah',
+            'delete' => 'hapus'
         ]);
-
+        
         parent::boot();
     }
 

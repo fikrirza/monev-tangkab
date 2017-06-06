@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.base')
 
 @section('content')
 <div class="container">
@@ -10,15 +10,15 @@
                     <form class="form-horizontal" role="form" method="POST" action="{{ route('register') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Name</label>
+                        <div class="form-group{{ $errors->has('skpd_id') ? ' has-error' : '' }}">
+                            <label for="skpd_id" class="col-md-4 control-label">SKPD</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
+                                <input id="skpd_id" type="text" class="form-control" name="skpd_id" value="{{ old('skpd_id') }}">
 
-                                @if ($errors->has('name'))
+                                @if ($errors->has('skpd_id'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
+                                        <strong>{{ $errors->first('skpd_id') }}</strong>
                                     </span>
                                 @endif
                             </div>

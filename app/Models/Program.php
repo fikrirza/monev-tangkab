@@ -6,25 +6,50 @@ use Illuminate\Database\Eloquent\Model;
 
 class Program extends Model
 {
-    public $incrementing = false;
-
-    public function scopeOnSkpd($query, $skpd)
-    {
-        return $query->where('skpd_id', $skpd);
-    }
+    protected $table = 'program';
 
     public function skpd()
     {
         return $this->belongsTo('App\Models\Skpd');
     }
 
-    public function activities()
+    public function kegiatan()
     {
-        return $this->hasMany('App\Models\Activity');
+        return $this->hasMany('App\Models\Kegiatan');
     }
 
-    public function results()
+    public function item()
     {
-        return $this->hasMany('App\Models\ProgramResult');
+        return $this->hasManyThrough(
+            'App\Models\ItemKegiatan', 
+            'App\Models\Kegiatan'
+        );
+    }
+
+    public function getCapaianAttribute()
+    {
+        $capaian = collect([]);
+        for ($i = 0; $i < 4; $i++)
+        {
+            $capaian->push($this->attributes['nilai_' . ($i + 1)]);
+        }
+
+        return $capaian;
+    }
+
+    public function setCapaianAttribute($capaian)
+    {
+        if (count($capaian) >= 4)
+        {
+            for($i = 0; $i < 4; $i++)
+            {
+                $this->attributes['nilai_' . ($i + 1)] = $capaian[$i];
+            }
+        }
+    }
+
+    public function getUraianAttribute()
+    {
+        return 'Terpenuhinya ' . $this->attributes['nama'];
     }
 }
