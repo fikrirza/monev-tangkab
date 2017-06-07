@@ -18,15 +18,15 @@ class CreateItemKegiatanTable extends Migration
             $table->integer('kegiatan_id')->unsigned();
             $table->string('rekening', 12);
             $table->string('nama');
-            $table->float('nilai_1')->nullable();
+            $table->bigInteger('nilai_1')->nullable();
             $table->string('satuan_1')->nullable();
-            $table->float('nilai_2')->nullable();
+            $table->bigInteger('nilai_2')->nullable();
             $table->string('satuan_2')->nullable();
-            $table->float('nilai_3')->nullable();
+            $table->bigInteger('nilai_3')->nullable();
             $table->string('satuan_3')->nullable();
-            $table->float('fisik');
-            $table->float('realisasi');
-            $table->float('total');
+            $table->bigInteger('fisik');
+            $table->bigInteger('realisasi');
+            $table->bigInteger('total');
             $table->string('expr');
             $table->timestamps();
 

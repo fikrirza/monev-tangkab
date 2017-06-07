@@ -18,12 +18,12 @@ class CreateIndikatorTable extends Migration
             $table->integer('kegiatan_id')->unsigned();
             $table->enum('nama', [ 'MASUKAN', 'KELUARAN', 'HASIL', 'DAMPAK', 'MANFAAT' ]);
             $table->text('uraian')->nullable();
-            $table->float('target')->nullable();
+            $table->bigInteger('target')->nullable();
             $table->string('satuan')->nullable();
-            $table->float('nilai_1'))->nullable();
-            $table->float('nilai_2'))->nullable();
-            $table->float('nilai_3'))->nullable();
-            $table->float('nilai_4'))->nullable();
+            $table->bigInteger('nilai_1')->nullable();
+            $table->bigInteger('nilai_2')->nullable();
+            $table->bigInteger('nilai_3')->nullable();
+            $table->bigInteger('nilai_4')->nullable();
             $table->timestamps();
 
             $table->foreign('kegiatan_id')->references('id')->on('kegiatan');
