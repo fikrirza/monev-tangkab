@@ -51,7 +51,7 @@
                 </div>
             </div>
             <div class="panel-body table-responsive">
-                <table class="table table-bordered datatable" data-paging="false" data-show-info="false" data-searching="false" data-ordering="false">
+                <table class="table table-bordered datatable" data-paging="false" data-show-info="false" data-searching="false" data-ordering="false" data-actions="excel,pdf,print">
                     <thead>
                         <tr>
                             <th rowspan="2">Indikator</th>
