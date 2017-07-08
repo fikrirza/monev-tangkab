@@ -13,7 +13,9 @@ use App\Models\Indikator;
 class DashboardController extends Controller
 {
     public function index()
-    {   
+    {
+        ini_set('memory_limit', '-1');
+
         $errors    = [];
         $program   = [];
         $kegiatan  = [];
