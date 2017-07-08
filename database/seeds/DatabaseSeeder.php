@@ -12,5 +12,13 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
+        $migrator = resolve('App\Services\MigratorService');
+
+        $migrator->skpd();
+        $migrator->user();
+        $migrator->program();
+        $migrator->kegiatan();
+        $migrator->item();
+        $migrator->indikator();
     }
 }

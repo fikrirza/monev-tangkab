@@ -59,7 +59,7 @@
                 </form>
             </div>
             <div class="panel-body table-responsive">
-                <table class="table table-bordered datatable" data-ordering="false" data-perpage="10">
+                <table class="table table-bordered datatable" data-ordering="false" data-perpage="10" data-actions="excel,pdf,print">
                     <thead>
                         <tr>
                             <th rowspan="2">Kode</th>

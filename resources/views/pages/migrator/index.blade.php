@@ -3,8 +3,8 @@
         <title>Migration Service</title>
     </head>
     <body>
-        Mengimpor data Pengguna..<br/>
-        {{ $service->user() }}<br/>
+        Mengimpor indikator
+        {{ $service->indikator() }}<br/>
         <br/>
         Done!
     <body>

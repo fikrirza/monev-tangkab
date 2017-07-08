@@ -264,10 +264,9 @@ class MigratorService
                     for ($i = 0; $i < 4; $i++)
                     {
                         $nilaiProp = 'nilai_' . ($i + 1);
-
                         if ($key->target_angka != null)
                         {
-                            $indikator->$nilaiProp = ($key->target_angka / 4 * (i + 1));
+                            $indikator->$nilaiProp = ($key->target_angka / 4 * ($i + 1));
                         }
                         else
                         {

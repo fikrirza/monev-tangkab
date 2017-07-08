@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="panel-body table-responsive">
-                <table class="table table-bordered datatable" data-sort="0" data-sort-type="asc">
+                <table class="table table-bordered datatable" data-sort="0" data-sort-type="asc" data-actions="excel,pdf,print">
                     <thead>
                         <tr>
                             <th rowspan="2">Kode</th>

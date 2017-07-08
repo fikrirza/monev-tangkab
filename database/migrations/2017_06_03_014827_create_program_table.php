@@ -18,10 +18,10 @@ class CreateProgramTable extends Migration
             $table->string('rekening', 7);
             $table->string('skpd_id', 10);
             $table->string('nama');
-            $table->float('nilai_1');
-            $table->float('nilai_2');
-            $table->float('nilai_3');
-            $table->float('nilai_4');
+            $table->bigInteger('nilai_1');
+            $table->bigInteger('nilai_2');
+            $table->bigInteger('nilai_3');
+            $table->bigInteger('nilai_4');
             $table->timestamps();
 
             $table->foreign('skpd_id')->references('id')->on('skpd');
