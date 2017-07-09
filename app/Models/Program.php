@@ -29,23 +29,51 @@ class Program extends Model
     public function getCapaianAttribute()
     {
         $capaian = collect([]);
+        $debug   = collect([]);
         for ($i = 0; $i < 4; $i++)
         {
-            $capaian->push($this->attributes['nilai_' . ($i + 1)]);
+            if ($this->item->count() > 0)
+            {
+                $total = $this->item->sum('total');
+                $nilai = $this->item->sum(function ($item) use($i) {
+                    $prop = 'nilai_' . ($i + 1);
+                    return $item->realisasi != null && $item->total > 0 ? $item->realisasi->$prop : 0;
+                });
+
+                $debug->push($nilai);
+                $capaian->push(($nilai / $total) * 100);
+            }
+            else
+            {
+                $capaian->push(0);
+            }
         }
 
         return $capaian;
     }
 
-    public function setCapaianAttribute($capaian)
+    public function getRealisasiAttribute()
     {
-        if (count($capaian) >= 4)
-        {
-            for($i = 0; $i < 4; $i++)
+        return $this->item->sum(function($item) {
+            if ($item->realisasi != null)
             {
-                $this->attributes['nilai_' . ($i + 1)] = $capaian[$i];
+                return $item->realisasi->nilai_1 + $item->realisasi->nilai_2 + $item->realisasi->nilai_3 + $item->realisasi->nilai_4;
             }
-        }
+
+            return 0;
+        });
+    }
+
+    public function getFisikAttribute()
+    {
+        return $this->item->avg(function($item) {
+            if ($item->realisasi != null)
+            {
+                return $item->realisasi->fisik;
+            }
+
+            return 0;
+        });
     }
 
     public function getUraianAttribute()

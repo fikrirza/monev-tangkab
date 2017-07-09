@@ -102,13 +102,6 @@
                 <h6 class="panel-title text-semibold">Indikator Program</h6>
 
                 <div class="heading-elements">
-                    @if (Auth::check())
-                        @if (Auth::user()->skpd_id == $program->skpd_id)
-                            <a href="#" class="btn btn-primary btn-raised" data-toggle="modal" data-target="#program-modal">
-                                Ubah Capaian
-                            </a>
-                        @endif
-                    @endif
                 </div>
             </div>
             <div class="panel-body table-responsive">
@@ -131,7 +124,7 @@
                             <td>{{ $program->uraian }}</td>
                             <td>Rp.{{ number_format($program->item()->sum('total'),2,",",".") }}
                             @foreach ($program->capaian as $capaian)
-                                <td>{{ $capaian }}%</td>
+                                <td>{{ number_format($capaian,2,".",".") }}%</td>
                             @endforeach
                         </tr>
                     </tbody>
@@ -167,7 +160,7 @@
                             <td>{{ $kegiatan->nama }}</td>
                             <td>Rp.{{ number_format($kegiatan->item->sum('total'),2,",",".") }}</td>
                             <td class="text-semibold">
-                                Rp.{{ number_format($kegiatan->item->sum('realisasi'),2,",",".") }}
+                                Rp.{{ number_format($kegiatan->realisasi,2,",",".") }}
                             </td>
                             <td class="text-semibold">
                                 {{ $kegiatan->item->avg('fisik') }} %

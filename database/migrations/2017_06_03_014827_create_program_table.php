@@ -14,14 +14,10 @@ class CreateProgramTable extends Migration
     public function up()
     {
         Schema::create('program', function(Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('rekening', 7);
             $table->string('skpd_id', 10);
             $table->string('nama');
-            $table->bigInteger('nilai_1');
-            $table->bigInteger('nilai_2');
-            $table->bigInteger('nilai_3');
-            $table->bigInteger('nilai_4');
             $table->timestamps();
 
             $table->foreign('skpd_id')->references('id')->on('skpd');

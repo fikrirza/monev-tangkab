@@ -19,6 +19,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 
     // --- DashboardController
     Route::get('/', 'DashboardController@index');
+    Route::get('/migration', 'DashboardController@migration');
 
     // --- ProgramController
     Route::resource('program', 'ProgramController');

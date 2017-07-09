@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $migrator->kegiatan();
         $migrator->item();
         $migrator->indikator();
+        $migrator->realisasi();
     }
 }

@@ -12,4 +12,9 @@ class ItemKegiatan extends Model
     {
         return $this->belongsTo('App\Models\Kegiatan');
     }
+
+    public function realisasi()
+    {
+        return $this->hasOne('App\Models\RealisasiItem', 'item_id');
+    }
 }

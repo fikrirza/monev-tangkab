@@ -78,28 +78,26 @@
                     </thead>
                     <tbody>
                         @foreach($programs as $program)
-                            @php($total_fisik    = $program->item->sum('fisik') == 0 ? 1 : $program->item->sum('fisik'))
-                            @php($total_keuangan = $program->item->sum('total') == 0 ? 1 : $program->item->sum('total'))
-                            @php($fisik          = ($program->item->sum('fisik') / 4) * (old('triwulan', 0) + 1))
-                            @php($keuangan       = ($program->item->sum('realisasi') / 4) * (old('triwulan', 0) + 1))
+                            @php($total_fisik = $program->item->sum('fisik') == 0 ? 1 : $program->item->sum('fisik'))
+                            @php($fisik       = ($program->item->sum('fisik') / 4) * (old('triwulan', 0) + 1))
 
                             <tr>
                                 <td>{{ $program->rekening }}</td>
                                 <td>{{ $program->nama }}</td>
-                                <td>Rp.{{ number_format($total_keuangan,2,".",".") }}</td>
-                                <td>{{ number_format(($keuangan / $total_keuangan) * 100,2,".",".") }}%</td>
-                                <td>{{ number_format(($fisik / $total_fisik) * 100,2,".",".") }}%</td>
+                                <td>Rp.{{ number_format($program->total,2,",",".") }}</td>
+                                <td>{{ number_format(($program->realisasi != null && $program->total > 0 ? $program->realisasi / $program->total : 0) * 100,2,".",".") }}%</td>
+                                <td>{{ number_format(($total_fisik > 0 && $fisik > 0 ? $fisik / $total_fisik : 0) * 100,2,".",".") }}%</td>
                                 <td>-</td>
                                 <td>-</td>
-                                <td>Rp.{{ number_format($keuangan,2,".",".") }}</td>
-                                <td>{{ number_format((((($fisik / $total_fisik) * 100 + ($keuangan / $total_keuangan) * 100) / 2) / 4) * (old('triwulan', 0) + 1),2,".",".") }}%</td>
+                                <td>Rp.{{ number_format($program->realisasi,2,".",".") }}</td>
+                                <td>0%</td>
                             </tr>
                             @foreach($program->kegiatan as $kegiatan)
                                 @php($prop           = 'nilai_' . (old('triwulan', 0) + 1))
                                 @php($total_fisik    = $kegiatan->item->sum('fisik') == 0 ? 1 : $kegiatan->item->sum('fisik'))
                                 @php($total_keuangan = $kegiatan->item->sum('total') == 0 ? 1 : $kegiatan->item->sum('total'))
                                 @php($fisik          = ($kegiatan->item->sum('fisik') * 4) / (old('triwulan', 0) + 1))
-                                @php($keuangan       = ($kegiatan->item->sum('realisasi') * 4) / (old('triwulan', 0) + 1))
+                                @php($keuangan       = $kegiatan->realisasi)
 
                                 <tr>
                                     <td>{{ $kegiatan->rekening }}</td>

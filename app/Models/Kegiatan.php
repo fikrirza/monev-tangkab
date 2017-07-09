@@ -22,4 +22,16 @@ class Kegiatan extends Model
     {
         return $this->hasMany('App\Models\Indikator');
     }
+
+    public function getRealisasiAttribute()
+    {
+        return $this->item->sum(function($item) {
+            if ($item->realisasi != null)
+            {
+                return $item->realisasi->nilai_1 + $item->realisasi->nilai_2 + $item->realisasi->nilai_3 + $item->realisasi->nilai_4;
+            }
+
+            return 0;
+        });
+    }
 }

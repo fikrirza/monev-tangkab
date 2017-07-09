@@ -60,12 +60,12 @@
                             <td>{{ $program->nama }}</td>
                             <td>Rp.{{ number_format($program->item()->sum('total'),2,",",".") }}</td>
                             @foreach ($program->capaian as $capaian)
-                                <td>{{ $capaian }}%</td>
+                                <td>{{ number_format($capaian,2,",",".") }}%</td>
                             @endforeach
                             <td class="text-semibold">
-                                Rp.{{ number_format($program->item()->sum('realisasi'),2,",",".") }}
+                                Rp.{{ number_format($program->realisasi,2,",",".") }}
                             </td>
-                            <td class="text-semibold">{{ $program->item()->avg('fisik') }}%</td>
+                            <td class="text-semibold">{{ $program->fisik }}%</td>
                             <td class="text-center">
                                 <a href="{{ url('program', $program->id) }}" class="btn btn-raised btn-primary">
                                     Lihat Detil

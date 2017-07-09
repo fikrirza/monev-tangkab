@@ -43,11 +43,11 @@
                 </h6>
 
                 <div class="heading-elements">
-                    @if (Auth::user()->skpd_id == $kegiatan->program->skpd_id)
+                    {{-- @if (Auth::user()->skpd_id == $kegiatan->program->skpd_id)
                         <a href="{{ url('realisasi/buat?kegiatan=' . $kegiatan->id) }}" class="btn btn-primary btn-raised">
                             Realisasi Kegiatan
                         </a>
-                    @endif
+                    @endif --}}
                 </div>
             </div>
             <div class="panel-body table-responsive">
@@ -139,12 +139,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($kegiatan->item->unique('rekening') as $item)
+                        @foreach ($kegiatan->item->sortByDesc('total')->unique('rekening') as $item)
                             <tr>
                                 <td>{{ $item->rekening }}</td>
                                 <td>{{ $item->nama }}</td>
                                 <td>Rp.{{ number_format($item->total,2,",",".") }}</td>
-                                <td>Rp.{{ number_format($item->realisasi,2,",",".") }}</td>
+                                <td>Rp.
+                                    @if ($item->realisasi != null)
+                                        {{ number_format($item->realisasi->nilai_1 + $item->realisasi->nilai_2 + $item->realisasi->nilai_3 + $item->realisasi->nilai_4,2,",",".") }}
+                                    @else
+                                        0,00
+                                    @endif
+                                </td>
                                 <td>{{ number_format($item->fisik,0,",",".") }}%</td>
                             </tr>
                         @endforeach

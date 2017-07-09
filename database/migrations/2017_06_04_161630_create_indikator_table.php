@@ -14,8 +14,8 @@ class CreateIndikatorTable extends Migration
     public function up()
     {
         Schema::create('indikator', function(Blueprint $table) {
-            $table->increments('id');
-            $table->integer('kegiatan_id')->unsigned();
+            $table->bigIncrements('id');
+            $table->bigInteger('kegiatan_id')->unsigned();
             $table->enum('nama', [ 'MASUKAN', 'KELUARAN', 'HASIL', 'DAMPAK', 'MANFAAT' ]);
             $table->text('uraian')->nullable();
             $table->bigInteger('target')->nullable();
