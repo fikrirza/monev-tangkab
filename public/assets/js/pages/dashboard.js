@@ -27,10 +27,13 @@ $(function() {
                     categories: ['Triwulan I', 'Triwulan II', 'Triwulan III', 'Triwulan IV']
                 },
                 y: {
+                    max: 100,
                     tick: {
-                        format: d3.format('%')
+                        format: function(value) {
+                            return d3.format('.1f')(value) + "%";
+                        }
                     }
-                }
+                },
             },
             grid: {
                 x: {

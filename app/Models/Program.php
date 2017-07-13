@@ -32,15 +32,14 @@ class Program extends Model
         $debug   = collect([]);
         for ($i = 0; $i < 4; $i++)
         {
-            if ($this->item->count() > 0)
+            $total = $this->item->sum('total');
+            if ($total > 0)
             {
-                $total = $this->item->sum('total');
                 $nilai = $this->item->sum(function ($item) use($i) {
                     $prop = 'nilai_' . ($i + 1);
-                    return $item->realisasi != null && $item->total > 0 ? $item->realisasi->$prop : 0;
+                    return $item->realisasi != null ? $item->realisasi->$prop : 0;
                 });
 
-                $debug->push($nilai);
                 $capaian->push(($nilai / $total) * 100);
             }
             else

@@ -17,6 +17,8 @@ class ProgramController extends Controller
      */
     public function index(Request $request)
     {
+        ini_set('max_execution_time', 30000);
+        
         $user     = Auth::user();
         $skpd     = Skpd::find($request->input('skpd', $user->skpd_id));
         $programs = $skpd == null ? Program::all() : Program::where('skpd_id', $skpd->id)->get();

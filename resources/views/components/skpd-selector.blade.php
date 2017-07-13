@@ -1,4 +1,4 @@
-@if (Auth::user()->skpd_id == null || Auth::user()->skpd_id == '1.01.01.00')
+@if (Auth::user()->skpd_id == null || Auth::user()->skpd_id == '4.03.01.01')
     <select class="select" onchange="window.location='{{ url(Request::url() . '?skpd=') }}' + this.value">
         <option value="" {{ Request::get('skpd') == null ? 'selected' : '' }}>Semua</option> 
         @foreach(\App\Models\Skpd::all() as $dinas)
