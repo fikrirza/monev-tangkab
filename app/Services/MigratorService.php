@@ -30,6 +30,7 @@ class MigratorService
         $console->writeln('----- EXPORTING SKPD -----');
         $progress = new ProgressBar($console, count($skpdData));
         $progress->setOverwrite(true);
+        $progress->setRedrawFrequency(1);
         foreach ($skpdData as $key)
         {
             try
@@ -79,11 +80,17 @@ class MigratorService
 
         $progress = new ProgressBar($console, count($skpdData));
         $progress->setOverwrite(true);
+        $progress->setRedrawFrequency(1);
         foreach ($skpdData as $skpd)
         {
             try
             {
                 $nama = str_replace(' ', '_', strtolower($skpd->nama));
+                if ($skpd->id == '4.03.01.01')
+                {
+                    $nama = 'bappeda';
+                }
+
                 User::create([
                     'skpd_id'  => $skpd->id,
                     'username' => $nama,
@@ -98,8 +105,6 @@ class MigratorService
                 $console->writeln($ex->getMessage());
                 $progress->display();
             }
-
-            
         }
 
         $progress->finish();
@@ -107,193 +112,66 @@ class MigratorService
         $console->writeln('COMPLETED');
     }
 
-    public function program()
+    public function mainData()
     {
         ini_set('max_execution_time', 30000);
-
-        // ---- INSERT UNIQUE PRORAM FROM SIMDA TO ADIK ----
-        $db       = DB::connection('apbd');
-        $programs = $db->table('TA_Program')->get();
+        $db    = DB::connection('apbd');
+        $simda = $db->table('simda_apbd_bl')->get();
 
         $console = new ConsoleOutput();
-        $console->writeln('----- EXPORTING PROGRAM -----');
+        $console->writeln('----- EXPORTING PROGRAM, KEGIATAN, ITEM -----');
 
-        $progress = new ProgressBar($console, count($programs));
+        $progress = new ProgressBar($console, count($simda));
         $progress->setOverwrite(true);
-        foreach ($programs as $key) 
+        $progress->setRedrawFrequency(1);
+
+        foreach ($simda as $key)
         {
-            try 
-            {
-                $bidangCode  = sprintf('%02d', $key->Kd_Bidang);
-                $programCode = sprintf('%02d', $key->Kd_Prog);
-                $unitCode    = sprintf('%02d', $key->Kd_Unit);
-                $subCode     = sprintf('%02d', $key->Kd_Sub);
-                $rekening    = implode('.', [ $key->Kd_Urusan, $bidangCode, $programCode ]);
-                $skpd        = Skpd::where('id', implode('.', [ $key->Kd_Urusan, $bidangCode, $unitCode, $subCode ]))->first();
+            $bidangCode   = sprintf('%02d', $key->kd_bidang);
+            $programCode  = implode('.', [ $key->kd_urusan, $bidangCode, sprintf('%02d', $key->kd_prog) ]);
+            $kegiatanCode = implode('.', [ $programCode, sprintf('%03d', $key->kd_keg) ]);
+            $itemCode     = implode('.', [ 
+                $key->kd_rek_1, 
+                $key->kd_rek_2, 
+                $key->kd_rek_3, 
+                sprintf('%02d', $key->kd_rek_4), 
+                sprintf('%03d', $key->kd_rek_5) 
+            ]);
 
-                if ($skpd != null) 
-                {
-                    $program           = new Program;
-                    $program->skpd_id  = $skpd->id;
-                    $program->rekening = $rekening;
-                    $program->nama     = $key->Ket_Program;
-                    $program->save();
-
-                    $progress->advance();
-                }
-                else
-                {
-                    $progress->clear();
-                    $console->writeln($skpd->rekening . ' not found (Program: ' . $rekening . ' - ' . $key->Ket_Program . ')');
-                    $progress->display();
-                }
-            }
-            catch (\Exception $ex)
+            $program  = Program::where('rekening', $programCode)->where('nama', $key->ket_program)->first();
+            $kegiatan = Kegiatan::where('rekening', $kegiatanCode)->where('nama', $key->ket_kegiatan)->first();
+            
+            if ($program == null)
             {
-                $progress->clear();
-                $console->writeln($ex->getMessage());
-                $progress->display();
+                $skpdCode = implode('.', [ $key->kd_urusan, $bidangCode, sprintf('%02d', $key->kd_unit), sprintf('%02d', $key->kd_sub) ]);
+                $skpd     = Skpd::where('id', $skpdCode)->first();
+
+                $program           = new Program;
+                $program->skpd_id  = $skpd->id;
+                $program->rekening = $programCode;
+                $program->nama     = $key->ket_program;
+                $program->save();
             }
+
+            if ($kegiatan == null)
+            {
+                $kegiatan = new Kegiatan;
+                $kegiatan->program_id = $program->id;
+                $kegiatan->rekening   = $kegiatanCode;
+                $kegiatan->nama       = $key->ket_kegiatan;
+                $kegiatan->save();
+            }
+
+            $item              = new ItemKegiatan;
+            $item->kegiatan_id = $kegiatan->id;
+            $item->rekening    = $itemCode;
+            $item->nama        = $key->keterangan;
+            $item->total       = $key->total;
+            $item->save();
+
+            $progress->advance();
         }
 
-        // ---- END OF INSERT UNIQUE PRORAM FROM SIMDA TO ADIK ----
-        $progress->finish();
-        $console->writeln('');
-        $console->writeln('COMPLETED');
-    }
-
-    public function kegiatan()
-    {
-        ini_set('max_execution_time', 30000);
-
-        // ---- INSERT UNIQUE KEGIATAN FROM SIMDA TO ADIK ----
-        $db       = DB::connection('apbd');
-        $kegiatan = $db->table('TA_Kegiatan')->get();
-
-        $console  = new ConsoleOutput();
-        $console->writeln('----- EXPORTING KEGIATAN -----');
-
-        $progress = new ProgressBar($console, count($kegiatan));
-        $progress->setOverwrite(true);
-        foreach ($kegiatan as $key) 
-        {
-            try 
-            {
-                $programCode = implode('.', [ $key->Kd_Urusan, sprintf('%02d', $key->Kd_Bidang), sprintf('%02d', $key->Kd_Prog) ]);
-                $program     = Program::where('rekening', $programCode)->first();
-                $rekening    = implode('.', [ $program->rekening, sprintf('%03d', $key->Kd_Keg) ]);
-
-                if ($program != null) 
-                {
-                    $kegiatan = new Kegiatan;
-                    $kegiatan->program_id = $program->id;
-                    $kegiatan->rekening   = $rekening;
-                    $kegiatan->nama       = $key->Ket_Kegiatan;
-                    $kegiatan->save();
-
-                    $progress->advance();
-                }
-                else
-                {
-                    $progress->clear();
-                    $console->writeln($programCode . ' not found (Kegiatan: ' . $rekening . ' - ' . $key->Ket_Kegiatan . ')');
-                    $progress->display();
-                }
-            }
-            catch (\Exception $ex)
-            {
-                $progress->clear();
-                $console->writeln($ex->getMessage());
-                $progress->display();
-            }
-        }
-
-        // ---- END INSERT UNIQUE KEGIATAN FROM SIMDA TO ADIK ---
-        $progress->finish();
-        $console->writeln('');
-        $console->writeln('COMPLETED');
-    }
-
-    public function item()
-    {
-        ini_set('max_execution_time', 30000);
-
-        //---- INSERT ITEM KEGIATAN FROM SIMDA TO ADIK ----
-        $db    = DB::connection('apbd');
-        $items = $db->table('simda_apbd_bl')
-                    ->select([
-                        'ket_kegiatan', 
-                        'kd_urusan', 
-                        'kd_bidang', 
-                        'kd_prog', 
-                        'kd_keg', 
-                        'kd_rek_1', 
-                        'kd_rek_2', 
-                        'kd_rek_3', 
-                        'kd_rek_4', 
-                        'kd_rek_5', 
-                        'keterangan', 
-                        'sat_1', 
-                        'nilai_1', 
-                        'sat_2', 
-                        'nilai_2', 
-                        'sat_3', 
-                        'nilai_3', 
-                        'nilai_rp', 
-                        'total', 
-                        'expr1'
-                    ])->get();
-        
-        // Disable foreign check to truncate
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        ItemKegiatan::query()->truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
-        $console  = new ConsoleOutput();
-        $console->writeln('----- EXPORTING ITEM KEGIATAN -----');
-
-        $progress = new ProgressBar($console, count($items));
-        $progress->setOverwrite(true);
-        foreach ($items as $key) 
-        {
-            try 
-            {
-                $nm = $key->ket_kegiatan;
-                $programCode  = implode('.', [ $key->kd_urusan, sprintf('%02d', $key->kd_bidang), sprintf('%02d', $key->kd_prog) ]);
-                $kegiatanCode = implode('.', [ $programCode, sprintf('%03d', $key->kd_keg) ]);
-                $kegiatan     = Kegiatan::where('rekening', $kegiatanCode)
-                                        ->where('nama', $key->ket_kegiatan)->first();
-
-                $rek_4    = sprintf('%02d', $key->kd_rek_4);
-                $rek_5    = sprintf('%03d', $key->kd_rek_5);;
-                $rekening = implode('.', [ $key->kd_rek_1, $key->kd_rek_2, $key->kd_rek_3, $rek_4, $rek_5 ]);
-
-                if ($kegiatan != null) 
-                {
-                    $item              = new ItemKegiatan;
-                    $item->kegiatan_id = $kegiatan->id;
-                    $item->rekening    = $rekening;
-                    $item->nama        = $key->keterangan;
-                    $item->total       = $key->total;
-                    $item->save();
-
-                    $progress->advance();
-                }
-                else
-                {
-                    $progress->clear();
-                    $console->writeln($kegiatanCode . ' not found (Item: ' . $rekening . ' - ' . $key->keterangan . ')');
-                    $progress->display();
-                }
-            }
-            catch (\Exception $ex)
-            {
-                $progress->clear();
-                $console->writeln($ex->getMessage());
-                $progress->display();
-            }
-        }
-        //---- END OF INSERT ITEM KEGIATAN FROM SIMDA TO ADIK ----
         $progress->finish();
         $console->writeln('');
         $console->writeln('COMPLETED');
@@ -324,6 +202,7 @@ class MigratorService
 
         $progress = new ProgressBar($console, count($indikatorData));
         $progress->setOverwrite(true);
+        $progress->setRedrawFrequency(1);
         foreach ($indikatorData as $key)
         {
             try
@@ -360,7 +239,7 @@ class MigratorService
                 else
                 {
                     $progress->clear();
-                    $console->writeln($kegiatanCode . ' not found (Kegiatan: ' . $key->nm_kegiatan . ')');
+                    $console->writeln($kegiatanCode . ' not found (Indikator: ' . $key->nm_indikator . ')');
                     $progress->display();
                 }
             }
@@ -389,19 +268,15 @@ class MigratorService
 
         $progress = new ProgressBar($console, count($spdRinc));
         $progress->setOverwrite(true);
+        $progress->setRedrawFrequency(1);
         foreach ($spdRinc as $key)
         {
             try
             {
-                $programCode  = implode('.', [ $key->Kd_Urusan, sprintf('%02d', $key->Kd_Bidang), sprintf('%02d', $key->Kd_Prog) ]);
-                $kegiatanCode = implode('.', [ $programCode, sprintf('%03d', $key->Kd_Keg) ]);
-
                 $rek_4    = sprintf('%02d', $key->Kd_Rek_4);
                 $rek_5    = sprintf('%03d', $key->Kd_Rek_5);
                 $rekening = implode('.', [ $key->Kd_Rek_1, $key->Kd_Rek_2, $key->Kd_Rek_3, $rek_4, $rek_5 ]);
-                $item     = ItemKegiatan::where('rekening', $rekening)->whereHas('kegiatan', function($query) use($kegiatanCode) {
-                    $query->where('rekening', $kegiatanCode);
-                })->first();
+                $item     = ItemKegiatan::where('rekening', $rekening)->first();
 
                 if ($item != null)
                 {
@@ -427,7 +302,7 @@ class MigratorService
                 else
                 {
                     $progress->clear();
-                    $console->writeln($kegiatanCode . ' not found (Item: ' . $rekening . ')');
+                    $console->writeln('Item not found (Item: ' . $rekening . ')');
                     $progress->display();
                 }
             }

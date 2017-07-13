@@ -16,9 +16,7 @@ class DatabaseSeeder extends Seeder
 
         $migrator->skpd();
         $migrator->user();
-        $migrator->program();
-        $migrator->kegiatan();
-        $migrator->item();
+        $migrator->mainData();
         $migrator->indikator();
         $migrator->realisasi();
     }
