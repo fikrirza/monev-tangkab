@@ -102,6 +102,13 @@
                 <h6 class="panel-title text-semibold">Indikator Program</h6>
 
                 <div class="heading-elements">
+                    @if (Auth::check())
+                        @if (Auth::user()->skpd_id == $program->skpd_id)
+                            <a href="#" class="btn btn-primary btn-raised" data-toggle="modal" data-target="#program-modal">
+                                Ubah Capaian
+                            </a>
+                        @endif
+                    @endif
                 </div>
             </div>
             <div class="panel-body table-responsive">
@@ -110,7 +117,7 @@
                         <tr>
                             <th rowspan="2">Uraian</th>
                             <th rowspan="2">Jumlah Anggaran</th>
-                            <th colspan="4" class="text-center">Target</th>
+                            <th colspan="4" class="text-center">Capaian</th>
                         </tr>
                         <tr>
                             <td>I</td>
