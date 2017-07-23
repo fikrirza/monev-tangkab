@@ -49,6 +49,31 @@ class Program extends Model
         }
     }
 
+    public function getTargetAttribute()
+    {
+        $capaian = collect([]);
+        $debug   = collect([]);
+        for ($i = 0; $i < 4; $i++)
+        {
+            $total = $this->item->sum('total');
+            if ($total > 0)
+            {
+                $nilai = $this->item->sum(function ($item) use($i) {
+                    $prop = 'nilai_' . ($i + 1);
+                    return $item->realisasi != null ? $item->realisasi->$prop : 0;
+                });
+
+                $capaian->push(($nilai / $total) * 100);
+            }
+            else
+            {
+                $capaian->push(0);
+            }
+        }
+
+        return $capaian;
+    }
+
     public function getRealisasiAttribute()
     {
         return $this->item->sum(function($item) {
